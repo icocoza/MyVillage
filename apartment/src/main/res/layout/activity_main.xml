@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" android:background="#ff404040">
+
+    <View         android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_weight="1.3"/>
+
+    <ImageView
+        android:id="@+id/imgFlat"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/round_domain_white_48dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="14sp" android:textColor="#ffffff" android:textStyle="bold"
+        android:text="마이빌리지"/>
+    <View         android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_weight="1"/>
+
+</LinearLayout>

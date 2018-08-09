@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="vertical" android:layout_margin="10dp">
+        <TextView android:id="@+id/tvNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" android:textColor="#ff0000ff"
+            android:text="NEW"/>
+        <TextView android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="2sp"
+            android:textSize="15sp"  android:textColor="#ff000000"
+            android:text="Title, 타이틀입니다"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="3sp"
+            android:orientation="horizontal">
+            <TextView android:id="@+id/tvId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="stephen"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginLeft="3dp" android:layout_marginRight="3dp"
+                android:text="•"/>
+            <TextView android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="5분"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="15sp"
+            android:orientation="horizontal" android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@mipmap/twotone_visibility_black_18dp"/>
+            <TextView android:id="@+id/tvWatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
+                android:textSize="11sp"
+                android:text="99+"/>
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp" android:layout_marginLeft="10sp"
+                android:src="@mipmap/twotone_thumb_up_black_18dp"/>
+            <TextView android:id="@+id/tvLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
+                android:textSize="11sp"
+                android:text="12"/>
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp" android:layout_marginLeft="10sp"
+                android:src="@mipmap/twotone_thumb_down_black_18dp"/>
+            <TextView android:id="@+id/tvDislike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
+                android:textSize="11sp"
+                android:text="5"/>
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp" android:layout_marginLeft="10sp"
+                android:src="@mipmap/twotone_sms_black_18dp"/>
+            <TextView android:id="@+id/tvReply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
+                android:textSize="11sp"
+                android:text="댓글"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="1px" android:background="#3f000000"/>
+</LinearLayout>

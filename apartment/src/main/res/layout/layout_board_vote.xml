@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:padding="15dp"
+    tools:showIn="@layout/activity_viewer">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp" android:orientation="horizontal" android:background="#DCDCDC">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp" android:layout_marginLeft="15dp"
+            android:src="@mipmap/round_how_to_vote_black_48dp" android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:layout_marginLeft="5dp"
+            android:gravity="center" android:textStyle="bold" android:textColor="#ff000000"
+            android:text="@string/vote" />
+        <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:gravity="center" android:paddingLeft="10dp" android:paddingRight="5dp"
+            android:textStyle="bold"
+            android:text="@string/attendee" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:gravity="center" android:paddingRight="5dp"
+            android:textStyle="bold" android:textColor="#ffff0000"
+            android:text="11" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:gravity="center" android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:text="@string/person"/>
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="1px" android:background="#3f000000"/>
+    <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+        <RadioGroup android:id="@+id/radioGroupHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical">
+            <include layout="@layout/view_vote_viewer"/>
+            <include layout="@layout/view_vote_viewer"/>
+        </RadioGroup>
+    </ScrollView>
+    <!--View android:layout_width="match_parent" android:layout_height="1px" android:background="#3f000000"/-->
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"  android:layout_gravity="center_horizontal"
+        android:enabled="false" android:theme="@style/Widget.AppCompat.Button.Colored"
+        android:text="@string/select" android:textSize="15dp" android:onClick="onClickSelectVote"/>
+</LinearLayout>

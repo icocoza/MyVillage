@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "278890015740",
+    "firebase_url": "https://myvillage-448fc.firebaseio.com",
+    "project_id": "myvillage-448fc",
+    "storage_bucket": "myvillage-448fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278890015740:android:6068677d911205dc",
+        "android_client_info": {
+          "package_name": "com.ccz.myvillage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278890015740-9sluuqe86a1k1tkm04fefqkeio0ktj4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb-toH-IqtQeq8KiOqZIxdSoC4UjUXpCE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

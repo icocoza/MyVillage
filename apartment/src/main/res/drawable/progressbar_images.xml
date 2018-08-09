@@ -1,0 +1,12 @@
+<animation-list android:oneshot="false" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:duration="200" android:drawable="@mipmap/progress_1" />
+    <item android:duration="200" android:drawable="@mipmap/progress_2" />
+    <item android:duration="200" android:drawable="@mipmap/progress_3" />
+    <item android:duration="200" android:drawable="@mipmap/progress_4" />
+    <item android:duration="200" android:drawable="@mipmap/progress_5" />
+    <item android:duration="200" android:drawable="@mipmap/progress_6" />
+    <item android:duration="200" android:drawable="@mipmap/progress_7" />
+    <item android:duration="200" android:drawable="@mipmap/progress_8" />
+    <item android:duration="200" android:drawable="@mipmap/progress_9" />
+    <item android:duration="400" android:drawable="@mipmap/progress_10" />
+</animation-list>

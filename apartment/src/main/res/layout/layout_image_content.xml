@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView android:id="@+id/ivPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:padding="5dp"/>
+        <ImageView android:id="@+id/ivDelete"
+            android:layout_width="32dp"
+            android:layout_height="32dp" android:src="@mipmap/round_clear_red_48dp" android:layout_gravity="right"
+            android:padding="5dp"/>
+    </FrameLayout>
+    <EditText android:id="@+id/edtComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:padding="5dp"
+        android:lines="@null"
+        android:hint="@string/input_image_comment" android:background="#00000000"
+        android:scrollbars="vertical" android:scrollbarStyle="insideInset" android:maxLength="64"
+        android:textSize="14sp"/>
+
+    <View
+        android:layout_width="match_parent" android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#7f808080"/>
+</LinearLayout>

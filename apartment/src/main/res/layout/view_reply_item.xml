@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"  android:layout_margin="10dp"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:layout_marginBottom="10dp">
+        <TextView android:id="@+id/tvGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" android:text="강동롯데캐슬"/>
+        <TextView android:id="@+id/tvDot"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" android:text="•" android:layout_marginLeft="5dp"/>
+        <TextView android:id="@+id/tvId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_marginLeft="5dp"
+            android:textSize="12sp" android:text="스티븐" android:textColor="#ff000000"/>
+    </LinearLayout>
+    <TextView android:id="@+id/tvReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+        android:textSize="14sp" android:text="스티븐 댓글입니다." android:textColor="#ff000000"/>
+    <TextView android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_margin="10dp"
+        android:text="1분"/>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#7f808080"/>
+</LinearLayout>

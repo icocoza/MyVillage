@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.WriteBoardActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp" android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:gravity="center" android:paddingLeft="15dp" android:paddingRight="10dp"
+                android:textStyle="bold"
+                android:text="@string/cancel"
+                android:onClick="onClickCancel"/>
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <TextView android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:gravity="center" android:textStyle="bold"
+                android:text="@string/selectcategory" android:textSize="18sp" android:textColor="#ff000000"
+                android:onClick="onClickCategory"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp" android:layout_gravity="center_vertical" android:src="@mipmap/round_keyboard_arrow_down_black_48dp"
+                android:onClick="onClickCategory"/>
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:gravity="center" android:paddingLeft="10dp" android:paddingRight="15dp"
+                android:textStyle="bold"
+                android:text="@string/textwrite"
+                android:onClick="onClickUpload"/>
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#7f808080"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="vertical">
+                <EditText android:id="@+id/edtTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" android:gravity="center_vertical" android:maxLength="64" android:background="#00000000"
+                    android:maxLines="1" android:hint="@string/input_title" android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:textSize="16sp"/>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#4f808080"/>
+
+                <EditText android:id="@+id/edtContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:paddingLeft="10dp" android:paddingRight="10dp"  android:layout_marginTop="15dp"
+                    android:inputType="textMultiLine" android:lines="@null"
+                    android:minLines="3"
+                    android:gravity="top|left" android:hint="@string/input_content" android:background="#00000000"
+                    android:scrollbars="vertical" android:scrollbarStyle="insideInset" android:maxLength="2000"
+                    android:textSize="15sp"/>
+                <LinearLayout android:id="@+id/placeHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+                <LinearLayout android:id="@+id/layoutVote"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp" android:layout_margin="15dp"
+                    android:background="#D3D3D3" android:orientation="horizontal" android:gravity="center_vertical" android:visibility="gone">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp" android:layout_marginLeft="15dp"
+                        android:alpha="0.7"
+                        android:src="@mipmap/twotone_how_to_vote_redbg_48dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp" android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1" android:orientation="vertical" android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:layout_marginBottom="5dp"
+                            android:text="@string/vote_added" android:textColor="#000000" android:textSize="15dp" android:textStyle="bold"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/vote_not_modify" android:textSize="13dp" android:textColor="#404040"/>
+                    </LinearLayout>
+                    <ImageView android:id="@+id/ivModify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:padding="10dp"
+                        android:src="@mipmap/twotone_more_horiz_black_24dp"
+                        android:onClick="onClickVoteModify"/>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#7f808080"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="match_parent" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="5dp" android:paddingBottom="5dp"
+                android:alpha="0.6"
+                android:src="@mipmap/round_photo_black_48dp"
+                android:onClick="onClickGallery"/>
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="match_parent" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="5dp" android:paddingBottom="5dp"
+                android:alpha="0.6"
+                android:src="@mipmap/round_photo_camera_black_48dp"
+                android:onClick="onClickCamera"/>
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="match_parent" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="5dp" android:paddingBottom="5dp"
+                android:alpha="0.6"
+                android:src="@mipmap/round_how_to_vote_black_48dp"
+                android:onClick="onClickVote"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

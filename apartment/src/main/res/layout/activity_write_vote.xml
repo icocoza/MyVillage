@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.WriteVoteActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent" android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp" android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:gravity="center" android:paddingLeft="15dp" android:paddingRight="10dp"
+                    android:textStyle="bold"
+                    android:text="@string/cancel"
+                    android:onClick="onClickCancel"/>
+                <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" android:layout_marginLeft="-10dp"
+                    android:src="@mipmap/round_how_to_vote_black_48dp" android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:layout_marginLeft="5dp"
+                    android:gravity="center" android:textStyle="bold"
+                    android:text="@string/vote"/>
+                <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:gravity="center" android:paddingLeft="10dp" android:paddingRight="15dp"
+                    android:textStyle="bold"
+                    android:text="@string/attach"
+                    android:onClick="onClickUpload"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1px" android:background="#3f000000"/>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout android:id="@+id/layoutHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical">
+                    <include layout="@layout/view_vote_writer"/>
+                    <include layout="@layout/view_vote_writer"/>
+                </LinearLayout>
+            </ScrollView>
+            <LinearLayout android:id="@+id/layoutInsert"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" android:orientation="horizontal" android:gravity="center_vertical">
+                <FrameLayout
+                    android:layout_width="45dp"
+                    android:layout_height="45dp" android:onClick="onClickAddItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp" android:layout_gravity="center"
+                        android:src="@mipmap/round_add_black_48dp" android:alpha="0.6"/>
+                </FrameLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:gravity="center" android:paddingLeft="5dp" android:paddingRight="10dp"
+                    android:textSize="14sp" android:textStyle="bold" android:alpha="0.6"
+                    android:text="@string/insert"
+                    android:onClick="onClickAddItem"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1px" android:background="#3f000000"/>
+        </LinearLayout>
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>

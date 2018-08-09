@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">MyVillage</string>
+
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+    <string name="later">나중에</string>
+    <string name="register"><u>새로가입</u></string>
+    <string name="cancel">취소</string>
+    <string name="textwrite">등록</string>
+    <string name="selectcategory">글위치 선택</string>
+    <string name="vote">투표</string>
+    <string name="attach">첨부</string>
+    <string name="insert">추가</string>
+    <string name="person">명</string>
+    <string name="attendee">참여인원</string>
+    <string name="modify">수정</string>
+    <string name="delete">삭제</string>
+    <string name="select">투표하기</string>
+    <string name="setting">내 설정</string>
+    <string name="changename"><u>이름변경</u></string>
+    <string name="viewtype">보기 방식</string>
+    <string name="viewlist">목록 타입</string>
+    <string name="viewcard">카드 타입</string>
+
+    <string name="net_error">서버에 잠시 접근할 수 없습니다.\n잠시후 다시 사용해 주세요.</string>
+    <string name="net_connect_error">서버에 연결할 수 없습니다.\n잠시후 다시 사용해 주세요.</string>
+    <string name="net_connect_failed">서버 접속에 실패하였습니다.\n잠시후 다시 사용해 주세요.</string>
+    <string name="signin_error">인증정보가 만료되었거나 올바르지 않습니다.\n재인증 받으시겠습니까?</string>
+
+    <string name="select_apartment">거주하시는 아파트를 선택하세요.</string>
+    <string name="select_apartment_to_next">거주하는 아파트를 지정해야\n다음 화면으로 이동합니다.</string>
+    <string name="input_username">사용자명을 입력하세요.</string>
+    <string name="input_username_short">사용자명이 너무 짧습니다.(한글가능)</string>
+    <string name="input_username_wrongtext">\', \" 문자는 사용할 수 없습니다.</string>
+    <string name="input_right">올바른 사용자명 입니다.</string>
+    <string name="already_exist_userid">이미 존재하는 사용자명 입니다.</string>
+    <string name="login_failed">로그인에 실패하였습니다.\n잠시후 다시 사용해 주세요.</string>
+    <string name="signin_failed">사용자 인증에 실패하였습니다.\n잠시후 다시 사용하시거나\n재인증 바랍니다.</string>
+    <string name="input_title">제목을 입력해 주세요~</string>
+    <string name="input_content">내용을 입력해 주세요.(최대 2000자)</string>
+    <string name="input_image_comment">이미지 설명을 입력하세요.(선택, 최대 64자)</string>
+    <string name="input_vote_text">투표 내용 입력하세요.</string>
+    <string name="input_reply">댓글을 입력하세요.</string>
+    <string name="exceed_max_upsize">최대 업로드 가능 용량 10MB를 초과하였습니다.</string>
+    <string name="fail_load_content">이미지 컨텐츠 로딩에 실패하였습니다.</string>
+
+    <string name="board_add_ok">마이빌리지에 글이 등록되었습니다.</string>
+    <string name="board_add_fail">마이빌리지에 글이 등록이 실패하였습니다.</string>
+    <string name="end_of_list">리스트의 끝입니다.</string>
+
+    <string name="fail_add_reply">댓글 등록에 실패하였습니다.\n다시 시도 바랍니다.</string>
+    <string name="vote_exceed_count">투표 항목 최대치는 %d 개 입니다.</string>
+    <string name="vote_not_empty">투표글은 공백을 등록할 수 없습니다.</string>
+    <string name="vote_min_2">투표 항목은 최소 2개이상 이어야 합니다.</string>
+    <string name="vote_added">투표목록이 첨부 되었습니다.</string>
+    <string name="vote_not_modify">투표항목 내용은 등록 후 수정할 수 없습니다.</string>
+</resources>

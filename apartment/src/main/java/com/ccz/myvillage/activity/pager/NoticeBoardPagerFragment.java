@@ -1,0 +1,202 @@
+package com.ccz.myvillage.activity.pager;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.ccz.myvillage.IConst;
+import com.ccz.myvillage.IRequestCode;
+import com.ccz.myvillage.R;
+import com.ccz.myvillage.activity.ViewerActivity;
+import com.ccz.myvillage.adapter.BoardItemListAdapter;
+import com.ccz.myvillage.common.ws.WsMgr;
+import com.ccz.myvillage.constants.ECmd;
+import com.ccz.myvillage.controller.NetMessage;
+import com.ccz.myvillage.dto.BoardItem;
+import com.ccz.myvillage.dto.Category;
+import com.ccz.myvillage.form.response.ResBoardList;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.java_websocket.client.WebSocketClient;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class NoticeBoardPagerFragment extends DefaultPagerFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+    private final int REQUEST_CODE_FOR_BOARDWRITE = 1001;
+
+    ListView lvBoardList;
+
+    private Category category;
+    private List<BoardItem> boardItemList = new ArrayList<>();
+    private Set<String> boardIdSet = new HashSet<>();
+    private BoardItemListAdapter boardItemListAdapter;
+
+    private boolean duplicatedBoardList = false;
+    private boolean scrollDown = false;
+    private boolean endOfList = false;
+
+    public NoticeBoardPagerFragment() {
+        super();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        category = (Category) getArguments().getSerializable("category");
+
+        //WsMgr.getInst().setOnWsListener(this.getActivity(), this);
+
+        //reqBoardItemList(category.getCategory(), 0, IConst.MAX_BOARDITEM_COUNT);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_board_listview, container, false);
+        lvBoardList = (ListView) linearLayout.findViewById(R.id.lvBoardList);
+        lvBoardList.setAdapter(boardItemListAdapter = new BoardItemListAdapter(getContext(), 0, 0, boardItemList));
+        lvBoardList.setOnScrollListener(this);
+        lvBoardList.setOnItemClickListener(this);
+        return linearLayout;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(IRequestCode.REQUESTCODE_BOARD_WRITE == requestCode && resultCode == 1) {
+            requestBoardListUp();
+        }else if(IRequestCode.REQUESTCODE_PREFERENCE == requestCode && resultCode == 1) {
+            lvBoardList.setAdapter(boardItemListAdapter = new BoardItemListAdapter(getContext(), 0, 0, boardItemList));
+        }
+    }
+
+    @Override
+    protected void processMessage(WebSocketClient wsconn, ECmd cmd, JsonNode jsonNode, String origMessage) throws IOException {
+        switch (cmd) {
+            case boardlist:
+                resBoardList(origMessage);
+                break;
+        }
+
+    }
+
+    public void requestBoardList() {
+        if(boardItemList.size()==0) {   //first
+            requestBoardListDown();
+        }
+    }
+
+    private void reqBoardItemList(int category, int offset, int count) {
+        ObjectNode node = NetMessage.makeDefaultNode(ECmd.boardlist);
+        node.put("category", category);
+        node.put("offset", offset);
+        node.put("count", count);
+        WsMgr.getInst().send(node.toString());
+    }
+
+    //코드가 복잡할 수 있으니 추후 정리 한번 하자.
+    private void resBoardList(String origMessage) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        ResBoardList res = mapper.readValue(origMessage, ResBoardList.class);
+        if(res.getResult().equals("ok")) {
+            if(scrollDown==true)
+                addItemToBottomOfList(res);
+            else
+                addItemToTopOfList(res);
+        }else if(res.getResult().equals("NoListData")) {
+            if(scrollDown == true )
+                endOfList = true;
+        }
+    }
+
+    private void addItemToBottomOfList(ResBoardList res) {
+        duplicatedBoardList = false;    //앞쪽 리스트를 갱신할 경우, 중복된 것이 존재할 경우 새로 갱신하지 않음.
+        List<BoardItem> itemList = res.getData();
+        itemList.stream().filter(x -> {
+            boolean contained = false;
+            if ((contained = boardIdSet.contains(x.getBoardid()) == true))
+                duplicatedBoardList = true;
+            return contained == false;
+        }).forEach(y -> {
+            boardItemList.add(y);
+            boardIdSet.add(y.getBoardid());
+        });
+        boardItemListAdapter.notifyDataSetChanged();
+        if(scrollDown == true && itemList.size() < IConst.MAX_BOARDITEM_COUNT)
+            endOfList = true;
+
+    }
+
+    private void addItemToTopOfList(ResBoardList res) {
+        List<BoardItem> itemList = res.getData();
+        for(int i=itemList.size()-1; i>=0; i--) {
+            BoardItem item = itemList.get(i);
+            if(boardIdSet.contains(item.getBoardid()) == false) {
+                boardItemList.add(0, item);
+                boardIdSet.add(item.getBoardid());
+            }
+        }
+        boardItemListAdapter.notifyDataSetChanged();
+    }
+
+    //////////////////////////////////
+    //// Start the ListView Events ///
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        BoardItem boardItem = (BoardItem) view.getTag();
+        Intent in = new Intent(this.getActivity(), ViewerActivity.class);
+        in.putExtra("item", boardItem);
+        startActivityForResult(in, REQUEST_CODE_FOR_BOARDWRITE);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+        if (lvBoardList.getLastVisiblePosition() == lvBoardList.getAdapter().getCount() -1 &&
+                lvBoardList.getChildAt(lvBoardList.getChildCount() - 1).getBottom() <= lvBoardList.getHeight()) {
+            if(endOfList==false)
+                requestBoardListDown();
+            else
+                Toast.makeText(this.getActivity(), getString(R.string.end_of_list), Toast.LENGTH_LONG).show();
+        }
+        else if (lvBoardList.getFirstVisiblePosition() == 0 && lvBoardList.getChildAt(0).getTop() >= 0) {
+            requestBoardListUp();
+        }
+
+        if(lvBoardList.canScrollVertically(-1) == false)
+            ;//top
+        else if(lvBoardList.canScrollVertically(1) == false)
+            ;//bottom
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+    }
+    //// End the ListView Events /////
+    //////////////////////////////////
+
+    private void requestBoardListUp() {
+        WsMgr.getInst().setOnWsListener(this.getActivity(), this);
+        scrollDown = false;
+        reqBoardItemList(category.getCategory(), 0, IConst.MAX_BOARDITEM_COUNT/2);
+    }
+
+    private void requestBoardListDown() {
+        WsMgr.getInst().setOnWsListener(this.getActivity(), this);
+        scrollDown = true;
+        reqBoardItemList(category.getCategory(), boardItemList.size(), IConst.MAX_BOARDITEM_COUNT);
+    }
+
+}

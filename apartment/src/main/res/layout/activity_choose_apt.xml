@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChooseAptActivity">
+    <LinearLayout android:layout_width="match_parent"  android:layout_height="match_parent" android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="0.5"/>
+        <TextView android:id="@+id/tvComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Select GPS Icon and Find Your Apartment"/>
+        <ImageView android:id="@+id/ivGps"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center" android:layout_marginTop="5dp"
+            android:src="@mipmap/twotone_gps_not_fixed_black_18dp"
+            android:onClick="onClickGps"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="0.8"/>
+
+        <TextView android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#ff666699"
+            android:text="아파트가 지정되지 않았습니다."/>
+        <View
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:foreground="#ff666699"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+        <FrameLayout
+            android:id="@+id/viewLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" android:padding="1sp" android:layout_marginBottom="30dp"
+            android:background="#5c5c8a">
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:background="#ffff0000"
+                android:text="다음" android:textColor="#ffffffff"
+                android:textStyle="bold"
+                android:onClick="onClickNext"
+                />
+        </FrameLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
