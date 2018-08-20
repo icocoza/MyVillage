@@ -14,6 +14,11 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowNoTitle">true</item>
+        <item name="android:buttonStyle">@style/NanumButtonStyle</item>
+        <item name="android:editTextStyle">@style/NanumEditTextStyle</item>
+        <item name="android:radioButtonStyle">@style/NanumRadioButtonStyle</item>
+        <item name="android:checkboxStyle">@style/NanumCheckboxStyle</item>
+        <item name="android:textViewStyle">@style/NanumTextViewStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -27,6 +32,13 @@
         <!--Required Api 21 above-->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <item name="android:buttonStyle">@style/NanumButtonStyle</item>
+        <item name="android:editTextStyle">@style/NanumEditTextStyle</item>
+        <item name="android:radioButtonStyle">@style/NanumRadioButtonStyle</item>
+        <item name="android:checkboxStyle">@style/NanumCheckboxStyle</item>
+        <item name="android:textViewStyle">@style/NanumTextViewStyle</item>
+
     </style>
 
     <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
@@ -37,5 +49,27 @@
     <style name="PrimaryButton" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
+
+    <style name="ProgressBarRectangle" parent="@style/Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/progressbar_rect</item>
+        <item name="android:minHeight">72dp</item>
+        <item name="android:minWidth">72dp</item>
+    </style>
+
+    <style name="NanumTextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanumfont</item>
+    </style>
+    <style name="NanumButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/nanumfont</item>
+    </style>
+    <style name="NanumEditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/nanumfont</item>
+    </style>
+    <style name="NanumRadioButtonStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/nanumfont</item>
+    </style>
+    <style name="NanumCheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/nanumfont</item>
     </style>
 </resources>

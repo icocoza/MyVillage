@@ -15,25 +15,23 @@
         <TextView android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="2sp"
-            android:textSize="15sp"  android:textColor="#ff000000"
+            android:textSize="16sp"  android:textColor="#ff000000"
             android:text="Title, 타이틀입니다"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_marginTop="3sp"
+            android:layout_height="wrap_content" android:layout_marginTop="10sp"
             android:orientation="horizontal">
             <TextView android:id="@+id/tvId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textSize="12sp" android:textColor="#585858"
                 android:text="stephen"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:layout_marginLeft="3dp" android:layout_marginRight="3dp"
                 android:text="•"/>
             <TextView android:id="@+id/tvTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textSize="12sp" android:textColor="#585858"
                 android:text="5분"/>
         </LinearLayout>
 
@@ -43,40 +41,40 @@
             android:layout_height="wrap_content" android:layout_marginTop="15sp"
             android:orientation="horizontal" android:gravity="center_vertical">
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp" android:layout_marginLeft="5dp" android:alpha="0.5"
                 android:src="@mipmap/twotone_visibility_black_18dp"/>
             <TextView android:id="@+id/tvWatch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
-                android:textSize="11sp"
+                android:layout_height="wrap_content" android:layout_marginLeft="5dp"
+                android:textSize="12sp" android:textColor="#404040"
                 android:text="99+"/>
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp" android:layout_marginLeft="10sp"
+                android:layout_width="12dp"
+                android:layout_height="12dp" android:layout_marginLeft="10dp" android:alpha="0.5"
                 android:src="@mipmap/twotone_thumb_up_black_18dp"/>
             <TextView android:id="@+id/tvLike"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
-                android:textSize="11sp"
+                android:layout_height="wrap_content" android:layout_marginLeft="5dp"
+                android:textSize="12sp" android:textColor="#404040"
                 android:text="12"/>
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp" android:layout_marginLeft="10sp"
+                android:layout_width="12dp"
+                android:layout_height="12dp" android:layout_marginLeft="10dp" android:alpha="0.5"
                 android:src="@mipmap/twotone_thumb_down_black_18dp"/>
             <TextView android:id="@+id/tvDislike"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
-                android:textSize="11sp"
+                android:layout_height="wrap_content" android:layout_marginLeft="5dp"
+                android:textSize="12sp" android:textColor="#404040"
                 android:text="5"/>
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp" android:layout_marginLeft="10sp"
+                android:layout_width="12dp"
+                android:layout_height="12dp" android:layout_marginLeft="10dp" android:alpha="0.5"
                 android:src="@mipmap/twotone_sms_black_18dp"/>
             <TextView android:id="@+id/tvReply"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginLeft="5sp"
-                android:textSize="11sp"
+                android:layout_height="wrap_content" android:layout_marginLeft="5dp"
+                android:textSize="12sp" android:textColor="#404040"
                 android:text="댓글"/>
         </LinearLayout>
     </LinearLayout>

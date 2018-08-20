@@ -20,22 +20,22 @@ uses-feature android:name="android.hardware.camera" android:required="true" />
     -->
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/my_village_launcher_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/my_village_launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChooseAptActivity" />
-        <activity android:name=".activity.ChooseIdActivity" />
+        <activity android:name=".activity.ChooseAptActivity" android:theme="@style/AppTheme.NoTitle"/>
+        <activity android:name=".activity.ChooseIdActivity" android:theme="@style/AppTheme.NoTitle"/>
         <activity android:name=".activity.MainBoardPageActivity" />
         <activity
             android:name=".activity.WriteBoardActivity"

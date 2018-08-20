@@ -9,7 +9,7 @@ public class IConst {
 
     //local
     //public static String host = "ws://192.168.43.224:8081/wss";//home
-    //public static String host = "ws://172.23.252.200:8081/wss";  //
+    //public static String host = "ws://172.23.244.82:8081/wss";  //
     //public static String apptoken = "XM2ezCyVelxmm99qg99ZzrZRVJ4A6fLJ9vgLKKVxripXYFMn6hVw7d8Ax1g6LaV3mCBr3kG0zCxJcgwwWvRxbLAieie";
 
     public static String PreferenceID = "MyVillagePref";

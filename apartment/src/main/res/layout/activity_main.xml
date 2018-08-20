@@ -9,16 +9,17 @@
 
     <ImageView
         android:id="@+id/imgFlat"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_gravity="center"
         android:src="@mipmap/round_domain_white_48dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="14sp" android:textColor="#ffffff" android:textStyle="bold"
-        android:text="마이빌리지"/>
+        android:textSize="18sp" android:textColor="#ffffff" android:textStyle="bold"
+        android:text="마이빌리지"
+        android:fontFamily="@font/nanumfont"/>
     <View         android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:layout_weight="1"/>
 

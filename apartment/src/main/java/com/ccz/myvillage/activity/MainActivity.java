@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.ccz.myvillage.ICache;
 import com.ccz.myvillage.IConst;
 import com.ccz.myvillage.R;
 import com.ccz.myvillage.activity.dialog.AlertManager;
@@ -80,8 +81,8 @@ public class MainActivity extends CommonActivity implements IWsListener {
     protected boolean processMessage(WebSocketClient wsconn, ECmd cmd, JsonNode jsonNode, String origMessage) throws IOException {
         if(ECmd.signin == cmd) {
             if(jsonNode.get("result").asText().equals("ok")) {
+                ICache.UserId = jsonNode.get("userid").asText();
                 Preferences.set(this, Preferences.USERNAME, jsonNode.get("username").asText());
-
                 WsMgr.getInst().setHasSignIn(true);
                 Intent intent = new Intent(this, MainBoardPageActivity.class);
                 startActivity(intent);

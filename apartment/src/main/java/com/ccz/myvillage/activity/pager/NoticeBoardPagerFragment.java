@@ -2,6 +2,7 @@ package com.ccz.myvillage.activity.pager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +48,7 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
 
     private boolean duplicatedBoardList = false;
     private boolean scrollDown = false;
-    private boolean endOfList = false;
+    private boolean scrollingLock = false;
 
     public NoticeBoardPagerFragment() {
         super();
@@ -115,9 +116,17 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
                 addItemToBottomOfList(res);
             else
                 addItemToTopOfList(res);
+            scrollingLock = false;
         }else if(res.getResult().equals("NoListData")) {
-            if(scrollDown == true )
-                endOfList = true;
+            Toast.makeText(this.getActivity(), getString(R.string.end_of_list), Toast.LENGTH_LONG).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    scrollingLock = false;
+                }
+                }, 10000);
+
         }
     }
 
@@ -134,8 +143,8 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
             boardIdSet.add(y.getBoardid());
         });
         boardItemListAdapter.notifyDataSetChanged();
-        if(scrollDown == true && itemList.size() < IConst.MAX_BOARDITEM_COUNT)
-            endOfList = true;
+        //if(scrollDown == true && itemList.size() < IConst.MAX_BOARDITEM_COUNT)
+        //    endOfList = true;
 
     }
 
@@ -163,14 +172,15 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
+        if(scrollingLock == true)
+            return;
         if (lvBoardList.getLastVisiblePosition() == lvBoardList.getAdapter().getCount() -1 &&
                 lvBoardList.getChildAt(lvBoardList.getChildCount() - 1).getBottom() <= lvBoardList.getHeight()) {
-            if(endOfList==false)
-                requestBoardListDown();
-            else
-                Toast.makeText(this.getActivity(), getString(R.string.end_of_list), Toast.LENGTH_LONG).show();
+            scrollingLock = true;
+            requestBoardListDown();
         }
         else if (lvBoardList.getFirstVisiblePosition() == 0 && lvBoardList.getChildAt(0).getTop() >= 0) {
+            scrollingLock = true;
             requestBoardListUp();
         }
 

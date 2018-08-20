@@ -5,7 +5,11 @@ import java.util.Date;
 public class TimeUtils {
 
     public static String calcLastTime(Date date) {
-        long diff = System.currentTimeMillis() - date.getTime();
+        return calcLastTime(date.getTime());
+    }
+
+    public static String calcLastTime(long time) {
+        long diff = System.currentTimeMillis() - time;
         if(diff < 60000)
             return "1분 이내";
         else if(diff < 3600000)
@@ -18,4 +22,5 @@ public class TimeUtils {
             return diff / 2592000000l + "개월";
         return diff / 31104000000l + "년";
     }
+
 }

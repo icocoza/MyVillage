@@ -10,17 +10,20 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccz.myvillage.ICache;
 import com.ccz.myvillage.IConst;
 import com.ccz.myvillage.R;
 import com.ccz.myvillage.common.ImageUtils;
@@ -63,8 +66,9 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
     private EditText edtReply;
 
     private List<ReplyItem> replyItemList = new ArrayList<>();
-    private Set<String> replyIdSet = new HashSet<>();
+    private Set<Long> replyIdSet = new HashSet<>();
     private  RadioGroup voteRadioGroup;
+    private LinearLayout placeHolderReply;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +93,8 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
             public void afterTextChanged(Editable editable) {
             }
         });
+        placeHolderReply = (LinearLayout) findViewById(R.id.placeHolderReply);
+        addPopupInViewer();
 
         WsMgr.getInst().setOnWsListener(this, this);
         reqBoardContent();
@@ -123,8 +129,14 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
             case addreply:
                 resAddReply(origMessage);
                 break;
+            case delreply:
+                resDelReply(jsonNode);
+                break;
             case like: case dislike:
                 resLikeDislike(origMessage);
+                break;
+            case delboard:
+                resDelBoard(jsonNode);
                 break;
         }
         return true;
@@ -146,12 +158,9 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         if (res.getResult().equals("ok")) {
             ((TextView) findViewById(R.id.tvTitle)).setText(boardItem.getTitle());
             ((TextView) findViewById(R.id.tvId)).setText(boardItem.getCreateusername());
-            ((TextView) findViewById(R.id.tvLike)).setText(boardItem.getLikes()+"");
-            ((TextView) findViewById(R.id.tvDislike)).setText(boardItem.getDislikes()+"");
-            ((TextView) findViewById(R.id.tvReply)).setText(boardItem.getReply()+"");
-            ((TextView) findViewById(R.id.tvVisit)).setText(boardItem.getVisit()+"");
             ((TextView) findViewById(R.id.tvContent)).setText(res.getContent());
             ((TextView) findViewById(R.id.tvTime)).setText(TimeUtils.calcLastTime(boardItem.getCreatetime()));
+            updateCount(boardItem.getLikes(), boardItem.getDislikes(), boardItem.getReply(), boardItem.getVisit());
 
             LinearLayout placeHolderFiles = (LinearLayout) findViewById(R.id.placeHolderFiles);
             for(BoardFile item : res.getFiles()) {
@@ -175,17 +184,24 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
     private void updateLikeDislike(EBoardPreference type, boolean isadd) {
         ImageView ivLike = (ImageView)findViewById(R.id.ivLike);
         ImageView ivDislike = (ImageView)findViewById(R.id.ivDislike);
-        ivLike.setPressed(false);
-        ivDislike.setPressed(false);
+        ivLike.setSelected(false);
+        ivDislike.setSelected(false);
         ivLike.setEnabled(true);
         ivDislike.setEnabled(true);
         if(type == EBoardPreference.like && isadd) {
-            ivLike.setPressed(true);
+            ivLike.setSelected(true);
             ivDislike.setEnabled(false);
         }else if(type == EBoardPreference.dislike && isadd){
             ivLike.setEnabled(false);
-            ivDislike.setPressed(true);
+            ivDislike.setSelected(true);
         }
+    }
+
+    private void updateCount(int likes, int dislikes, int reply, int visit) {
+        ((TextView) findViewById(R.id.tvLike)).setText(likes+"");
+        ((TextView) findViewById(R.id.tvDislike)).setText(dislikes+"");
+        ((TextView) findViewById(R.id.tvReply)).setText(reply+"");
+        ((TextView) findViewById(R.id.tvVisit)).setText(visit+"");
     }
 
     private void updateVoteList(List<VoteItem> voteList) {
@@ -215,21 +231,51 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         ObjectMapper mapper = new ObjectMapper();
         ResReplyList res = mapper.readValue(origMessage, ResReplyList.class);
         if (res.getResult().equals("ok")) {
-            for(ReplyItem item : res.getData()) {
-                if(replyIdSet.contains(item.getReplyid()) == false) {
-                    replyItemList.add(item);
-                    addReplyItemToLayout(item);
-                }
+            updateReplyList(res);
+        }
+    }
+
+    private void updateReplyList(ResReplyList res) {
+        for(ReplyItem item : res.getData()) {
+            if(replyIdSet.contains(item.getReplyid()) == false) {
+                replyIdSet.add(item.getReplyid());
+                replyItemList.add(item);
+                addReplyItemToLayout(item);
             }
         }
     }
 
     private void addReplyItemToLayout(ReplyItem item) {
-        View view = getLayoutInflater().inflate(R.layout.view_reply_item, null);
-        ((TextView)view.findViewById(R.id.tvId)).setText(item.username);
-        ((TextView)view.findViewById(R.id.tvReply)).setText(item.msg);
-        LinearLayout placeHolderReply = (LinearLayout) findViewById(R.id.placeHolderReply);
-        placeHolderReply.addView(view);
+        View replyItem = getLayoutInflater().inflate(R.layout.view_reply_item, null);
+        ((TextView)replyItem.findViewById(R.id.tvId)).setText(item.username);
+        ((TextView)replyItem.findViewById(R.id.tvReply)).setText(item.msg);
+        ((TextView)replyItem.findViewById(R.id.tvTime)).setText(item.getReplyTimeStr());
+        if(ICache.UserId.equals(item.getUserid()) == true) {
+            ImageView ivMore = ((ImageView) replyItem.findViewById(R.id.ivMore));
+            ivMore.setTag(item);
+            replyItem.setTag(item);
+            ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopupMenu p = new PopupMenu(getApplicationContext(), view);
+                    getMenuInflater().inflate(R.menu.menu_delete_popup, p.getMenu());
+                    p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.delete:// delete
+                                    reqDelReply((ReplyItem) view.getTag());
+                                    return true;
+                            }
+                            return false;
+                        }
+                    });
+                    p.show();
+                }
+            });
+            ivMore.setVisibility(View.VISIBLE);
+        }
+        placeHolderReply.addView(replyItem);
     }
 
     public void onClickAddReply(View view) {
@@ -247,24 +293,62 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
 
     private void resAddReply(String origMessage) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        ResponseCmd res = mapper.readValue(origMessage, ResponseCmd.class);
+        ResReplyList res = mapper.readValue(origMessage, ResReplyList.class);
         if (res.getResult().equals("ok") == true) {
-            reqBoardReply(replyItemList.size(), IConst.MAX_BOARDITEM_COUNT);
             edtReply.getText().clear();
+            placeHolderReply.removeAllViews();
+            replyItemList.clear();
+            replyIdSet.clear();
+            updateReplyList(res);
         }else
             Toast.makeText(this, getString(R.string.fail_add_reply), Toast.LENGTH_LONG).show();
     }
+
+    private void reqDelReply(ReplyItem item) {
+        ObjectNode node = NetMessage.makeDefaultNode(ECmd.delreply);
+        node.put("boardid", boardItem.getBoardid());
+        node.put("replyid", item.getReplyid()); //reserved
+        WsMgr.getInst().send(node.toString());
+    }
+
+    private void resDelReply(JsonNode jsonNode) {
+        if("ok".equals(jsonNode.get("result").asText()) == true) {
+            String replyid = jsonNode.get("replyid").asText();
+            for (int i = 0; i < placeHolderReply.getChildCount(); i++) {
+                View view = placeHolderReply.getChildAt(i);
+                ReplyItem item = (ReplyItem) view.getTag();
+                if (replyid.equals(item.getReplyid()) == true) {
+                    placeHolderReply.removeView(view);
+                    return;
+                }
+            }
+        }
+        Toast.makeText(this, getString(R.string.fail_del_reply), Toast.LENGTH_SHORT).show();
+    }
+
 
     private void resLikeDislike(String origMessage) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ResBoardLike res = mapper.readValue(origMessage, ResBoardLike.class);
         if (res.getResult().equals("ok") == true) {
             this.updateLikeDislike(res.getPreference(), res.isIsadd());
+            updateCount(res.getLikes(), res.getDislikes(), res.getReply(), res.getVisit());
         }
     }
 
-    public void onClickBack(View view) {
-        finish();
+    private void reqDelBoard() {
+        ObjectNode node = NetMessage.makeDefaultNode(ECmd.delboard);
+        node.put("boardid", boardItem.getBoardid());
+        WsMgr.getInst().send(node.toString());
+    }
+
+    private void resDelBoard(JsonNode jsonNode) {
+        if("ok".equals(jsonNode.get("result").asText()) == true) {
+            String boardid = jsonNode.get("boardid").asText();
+            finish();
+            return;
+        }
+        Toast.makeText(this, getString(R.string.fail_del_board), Toast.LENGTH_SHORT).show();
     }
 
     public void onClickAddLike(View view) {
@@ -273,7 +357,7 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         ObjectNode node = NetMessage.makeDefaultNode(ECmd.like);
         node.put("boardid", boardItem.getBoardid());
         node.put("preference", "like"); //reserved
-        node.put("isadd", !ivLike.isPressed());
+        node.put("isadd", !ivLike.isSelected());
         WsMgr.getInst().send(node.toString());
     }
 
@@ -283,7 +367,7 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         ObjectNode node = NetMessage.makeDefaultNode(ECmd.dislike);
         node.put("boardid", boardItem.getBoardid());
         node.put("preference", "dislike"); //reserved
-        node.put("isadd", !ivDislike.isPressed());
+        node.put("isadd", !ivDislike.isSelected());
         WsMgr.getInst().send(node.toString());
     }
 
@@ -298,6 +382,9 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         node.put("vitemid", voteItem.getVitemid()); //reserved
         node.put("isselect", true);
         WsMgr.getInst().send(node.toString());
+    }
+
+    public void onClickMore(View view) {
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -323,5 +410,36 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         protected void onPostExecute(Bitmap result) {
             ivThumbnail.setImageBitmap(result);
         }
+    }
+
+    private void addPopupInViewer() {
+        View vwMore = findViewById(R.id.layoutMore);
+        vwMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu p = new PopupMenu(getApplicationContext(), view);
+                if(ICache.UserId.equals(boardItem.getUserid()))
+                    getMenuInflater().inflate(R.menu.menu_vote_popup, p.getMenu());
+                else
+                    getMenuInflater().inflate(R.menu.menu_report_popup, p.getMenu());
+                p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.delete:// delete
+                                reqDelBoard();
+                                return true;
+                            case R.id.report:
+                            case R.id.modify:
+                                Toast.makeText(ViewerActivity.this, "Not Implemented NOW", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                p.show();
+            }
+        });
+
     }
 }

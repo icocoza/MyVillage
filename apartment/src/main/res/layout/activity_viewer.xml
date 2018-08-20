@@ -20,9 +20,20 @@
             </FrameLayout>
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp" android:textStyle="bold"
+                android:layout_height="wrap_content" android:layout_marginLeft="-10dp"
+                android:textSize="15dp" android:textStyle="bold"
                 android:text="MyVillage" android:alpha="0.6"/>
+            <View android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <FrameLayout android:id="@+id/layoutMore"
+                android:layout_width="45dp" android:layout_height="45dp"
+                android:onClick="onClickMore">
+                <ImageView android:id="@+id/ivMore"
+                    android:layout_width="24dp" android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/selector_btn_more" android:alpha="0.6"/>
+            </FrameLayout>
+
         </LinearLayout>
 
         <ScrollView android:id="@+id/scrollView"
@@ -34,25 +45,27 @@
                 <TextView android:id="@+id/tvTitle"
                     android:layout_width="match_parent"
                     android:layout_height="40dp" android:gravity="center_vertical"
-                    android:textSize="18sp" android:textStyle="bold" android:textColor="#ff000000" android:text="제목" android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
+                    android:textSize="20sp" android:textStyle="bold" android:textColor="#ff000000" android:text="제목"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp" android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                    android:layout_marginLeft="15dp" android:layout_marginRight="15dp">
                     <TextView android:id="@+id/tvId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#9933ff"
+                        android:textColor="#9933ff" android:textSize="14sp"
                         android:text="아이디"/>
-                    <View android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
+                    <View android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp" android:layout_marginRight="5dp"
-                        android:src="@mipmap/twotone_visibility_black_18dp"/>
+                        android:src="@mipmap/twotone_visibility_black_18dp" android:alpha="0.6"/>
                     <TextView android:id="@+id/tvVisit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:layout_marginRight="5dp"
-                        android:text="0"/>
+                        android:text="0" android:textSize="14sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:layout_marginRight="5dp"
@@ -61,13 +74,14 @@
                     <TextView android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="7시간"/>
+                        android:text="7시간" android:textSize="14sp"/>
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#7f808080"/>
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_margin="5dp" android:background="#7f808080"/>
                 <TextView android:id="@+id/tvContent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:layout_margin="10dp"
-                    android:textSize="15dp"
+                    android:layout_height="wrap_content" android:layout_margin="15dp"
+                    android:textSize="15sp"
                     android:text="내용"/>
                 <LinearLayout android:id="@+id/placeHolderFiles"
                     android:layout_width="match_parent"
@@ -77,9 +91,9 @@
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_margin="10dp"
                     android:layout_height="40dp" android:orientation="horizontal" android:gravity="center_vertical">
-                    <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:onClick="onClickAddLike">
+                    <FrameLayout android:layout_width="45dp" android:layout_height="45dp" android:onClick="onClickAddLike">
                         <ImageView android:id="@+id/ivLike"
-                            android:layout_width="24dp" android:layout_height="24dp" android:alpha="0.5" android:layout_gravity="center"
+                            android:layout_width="20dp" android:layout_height="20dp" android:alpha="0.5" android:layout_gravity="center"
                             android:src="@drawable/selector_btn_like"/>
                     </FrameLayout>
                     <TextView android:id="@+id/tvLike"
@@ -90,10 +104,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"
                         android:text="|" android:textStyle="bold" android:textSize="14dp"/>
-                    <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:onClick="onClickAddDislike">
+                    <FrameLayout android:layout_width="45dp" android:layout_height="45dp" android:onClick="onClickAddDislike">
                         <ImageView android:id="@+id/ivDislike"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp" android:alpha="0.5" android:layout_gravity="center"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" android:alpha="0.5" android:layout_gravity="center"
                             android:src="@drawable/selector_btn_dislike"/>
                     </FrameLayout>
                     <TextView android:id="@+id/tvDislike"
@@ -104,10 +118,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"
                         android:text="|" android:textStyle="bold" android:textSize="14dp"/>
-                    <FrameLayout android:layout_width="40dp" android:layout_height="40dp">
+                    <FrameLayout android:layout_width="45dp" android:layout_height="45dp">
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp" android:alpha="0.5" android:layout_gravity="center"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" android:alpha="0.5" android:layout_gravity="center"
                             android:src="@mipmap/round_sms_black_48dp"/>
                     </FrameLayout>
                     <TextView android:id="@+id/tvReply"
@@ -118,10 +132,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"
                         android:text="|" android:textStyle="bold" android:textSize="14dp" />
-                    <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:onClick="onClickShare">
+                    <FrameLayout android:layout_width="45dp" android:layout_height="45dp" android:onClick="onClickShare">
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp" android:alpha="0.5" android:layout_marginRight="10dp" android:layout_gravity="center"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" android:alpha="0.5" android:layout_marginRight="10dp" android:layout_gravity="center"
                             android:src="@mipmap/round_share_black_48dp"/>
                     </FrameLayout>
                 </LinearLayout>

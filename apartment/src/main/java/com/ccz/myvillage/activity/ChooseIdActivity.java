@@ -9,9 +9,11 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ccz.myvillage.BuildConfig;
+import com.ccz.myvillage.ICache;
 import com.ccz.myvillage.R;
 import com.ccz.myvillage.activity.dialog.AlertManager;
 import com.ccz.myvillage.common.Preferences;
@@ -38,11 +40,20 @@ public class ChooseIdActivity extends CommonActivity implements IWsListener, Tex
     private String uuid = null;
 
     private EditText edtUid;
+    private ProgressBar pbProgress;
+    private View nextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_id);
+
+        edtUid = (EditText)findViewById(R.id.edtUid);
+        edtUid.addTextChangedListener(this);
+        pbProgress = (ProgressBar)findViewById(R.id.pbProgress);
+        nextButton = (Button)findViewById(R.id.btnNext);
+        nextButton.setEnabled(false);
+
         WsMgr.getInst().setOnWsListener(this, this);
 
         buildingInfo = (BuildingInfo) this.getIntent().getSerializableExtra("buildingInfo");
@@ -50,11 +61,11 @@ public class ChooseIdActivity extends CommonActivity implements IWsListener, Tex
             ((TextView)findViewById(R.id.tvName)).setText(buildingInfo.getBuildName());
         }
 
-        edtUid = (EditText)findViewById(R.id.edtUid);
-        edtUid.addTextChangedListener(this);
     }
 
     public void onClickNext(View view) {
+        pbProgress.setVisibility(View.VISIBLE);
+        nextButton.setEnabled(false);
         ObjectNode node = NetMessage.makeDefaultNode(ECmd.find_id);
         node.put("uid", uid);
         WsMgr.getInst().send(node.toString());
@@ -68,9 +79,11 @@ public class ChooseIdActivity extends CommonActivity implements IWsListener, Tex
     }
 
     public void onClickRegister(View view) {
+        view.setEnabled(false);
         Intent in = new Intent(this, ChooseAptActivity.class);
         startActivity(in);
         finish();
+
     }
 
     @Override
@@ -85,7 +98,7 @@ public class ChooseIdActivity extends CommonActivity implements IWsListener, Tex
 
     @Override
     public void onError(WebSocketClient wsconn, Exception e) {
-
+        pbProgress.setVisibility(View.GONE);
     }
 
     @Override
@@ -101,6 +114,8 @@ public class ChooseIdActivity extends CommonActivity implements IWsListener, Tex
                 enabledUid = false;
                 setComment(getString(R.string.already_exist_userid), enabledUid);
                 setButtonStatus(enabledUid);
+                pbProgress.setVisibility(View.GONE);
+                nextButton.setEnabled(true);
             }
         }else if(ECmd.anony_login_buildid == cmd) {
             if(result.equals("ok") == true) {
@@ -108,15 +123,20 @@ public class ChooseIdActivity extends CommonActivity implements IWsListener, Tex
             }else {
                 AlertManager.showYes(this, null, getString(R.string.login_failed), null);
                 //finish();
+                pbProgress.setVisibility(View.GONE);
+                nextButton.setEnabled(true);
             }
         }else if(ECmd.signin == cmd) {
             if(result.equals("ok") == true) {
+                ICache.UserId = jsonNode.get("userid").asText();
                 Intent intent = new Intent(this, MainBoardPageActivity.class);
                 startActivity(intent);
                 finish();
             }else {
                 AlertManager.showYes(this, null, getString(R.string.signin_failed), null);
                 ((TextView)findViewById(R.id.tvRegister)).setVisibility(View.VISIBLE);
+                pbProgress.setVisibility(View.GONE);
+                nextButton.setEnabled(true);
             }
         }
         return true;

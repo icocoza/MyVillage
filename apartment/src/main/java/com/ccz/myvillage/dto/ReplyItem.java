@@ -1,5 +1,6 @@
 package com.ccz.myvillage.dto;
 
+import com.ccz.myvillage.common.TimeUtils;
 import com.ccz.myvillage.form.response.ResponseCmd;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,5 +22,9 @@ public class ReplyItem implements Serializable {
     @JsonProperty public int getDepth() {     return depth;   }
     @JsonProperty public String getMsg() {  return msg; }
     @JsonProperty public long getReplytime() {  return replytime;   }
+
+    public String getReplyTimeStr() {
+        return TimeUtils.calcLastTime(replytime);
+    }
 
 }

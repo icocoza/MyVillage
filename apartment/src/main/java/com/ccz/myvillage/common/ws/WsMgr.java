@@ -1,6 +1,7 @@
 package com.ccz.myvillage.common.ws;
 
 import android.app.Activity;
+import android.util.Log;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -113,6 +114,7 @@ public class WsMgr {
                 WsMgr.this.activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("[PACKET]", s);
                         WsMgr.this.onWsListener.onMessage(webSocketClient, s);
                     }
                 });

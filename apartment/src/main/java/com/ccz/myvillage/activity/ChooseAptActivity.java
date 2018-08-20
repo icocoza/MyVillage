@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,18 +47,26 @@ public class ChooseAptActivity extends CommonActivity implements IWsListener {
     static public final int REQUEST_LOCATION = 1;
     private Location lastKnownLocation = null;
 
-    List<BuildingInfo> buildingList = null;
+    private List<BuildingInfo> buildingList = null;
 
-    BuildingInfo buildingInfo;
+    private BuildingInfo buildingInfo;
 
-    LocationListener locationListener;
+    private LocationListener locationListener;
     private FusedLocationProviderClient mFusedLocationClient;
-    OnCompleteListener<Location> mCompleteListener;
+    private OnCompleteListener<Location> mCompleteListener;
+
+    private ImageView ivGps;
+    private ProgressBar pbProgress;
+    private TextView tvName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_apt);
+
+        ivGps = (ImageView)findViewById(R.id.ivGps);
+        pbProgress = (ProgressBar)findViewById(R.id.pbProgress);
+        tvName = (TextView)findViewById(R.id.tvName);
 
         WsMgr.getInst().setOnWsListener(this, this);
 
@@ -70,6 +79,11 @@ public class ChooseAptActivity extends CommonActivity implements IWsListener {
         if (requestCode == REQUEST_LOCATION) {
             getCurrentLocation();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressedTwice();
     }
 
     private void getLocationPermission() {
@@ -120,10 +134,12 @@ public class ChooseAptActivity extends CommonActivity implements IWsListener {
             showBuildingsList(origMessage);
             ((ImageView)findViewById(R.id.ivGps)).setEnabled(true);
         }
+        pbProgress.setVisibility(View.GONE);
         return true;
     }
 
     private void requestBuildingsList(double lon, double lat) {
+        pbProgress.setVisibility(View.VISIBLE);
         ObjectNode node = NetMessage.makeDefaultNode(ECmd.gps_search);
         node.put("lon", lon);
         node.put("lat", lat);
@@ -145,7 +161,8 @@ public class ChooseAptActivity extends CommonActivity implements IWsListener {
             @Override
             public void onDialogResult(boolean yesOrNo, int type) {
                 if(yesOrNo==true && buildingInfo != null) {
-                    TextView tvName = ChooseAptActivity.this.findViewById(R.id.tvName);
+                    tvName.setTextSize(20f);
+                    tvName.setTextColor(0xff000000);
                     tvName.setText(buildingInfo.getBuildName());
                 }else if(yesOrNo==false) {
                     buildingInfo = null;

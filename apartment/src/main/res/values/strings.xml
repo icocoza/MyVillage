@@ -16,12 +16,14 @@
     <string name="modify">수정</string>
     <string name="delete">삭제</string>
     <string name="select">투표하기</string>
+    <string name="report">신고하기</string>
     <string name="setting">내 설정</string>
     <string name="changename"><u>이름변경</u></string>
     <string name="viewtype">보기 방식</string>
     <string name="viewlist">목록 타입</string>
     <string name="viewcard">카드 타입</string>
 
+    <string name="touch_gps">아래 GPS 버튼을 터치하여\n거주 아파트를 선택하세요.</string>
     <string name="net_error">서버에 잠시 접근할 수 없습니다.\n잠시후 다시 사용해 주세요.</string>
     <string name="net_connect_error">서버에 연결할 수 없습니다.\n잠시후 다시 사용해 주세요.</string>
     <string name="net_connect_failed">서버 접속에 실패하였습니다.\n잠시후 다시 사용해 주세요.</string>
@@ -49,6 +51,8 @@
     <string name="end_of_list">리스트의 끝입니다.</string>
 
     <string name="fail_add_reply">댓글 등록에 실패하였습니다.\n다시 시도 바랍니다.</string>
+    <string name="fail_del_reply">댓글 삭제에 실패하였습니다.\n다시 시도 바랍니다.</string>
+    <string name="fail_del_board">게시글 삭제에 실패하였습니다.\n다시 시도 바랍니다.</string>
     <string name="vote_exceed_count">투표 항목 최대치는 %d 개 입니다.</string>
     <string name="vote_not_empty">투표글은 공백을 등록할 수 없습니다.</string>
     <string name="vote_min_2">투표 항목은 최소 2개이상 이어야 합니다.</string>

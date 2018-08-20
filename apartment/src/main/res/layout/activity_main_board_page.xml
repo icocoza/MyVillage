@@ -1,91 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.MainBoardPageActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" android:background="#ffffff"
-        android:orientation="vertical">
-
-        <FrameLayout android:id="@+id/layoutTopMenu"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".activity.MainBoardPageActivity">
+    <FrameLayout
+        android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="90dp" android:background="#ff00994d">
-            <com.yarolegovich.discretescrollview.DiscreteScrollView
-                android:id="@+id/pickerMenu"
+            android:layout_height="match_parent" android:background="#ffffff"
+            android:orientation="vertical">
+
+            <FrameLayout android:id="@+id/layoutTopMenu"
                 android:layout_width="match_parent"
-                android:layout_height="75dp" android:layout_marginTop="13dp"/>
+                android:layout_height="90dp" android:background="#ff00994d">
+                <com.yarolegovich.discretescrollview.DiscreteScrollView
+                    android:id="@+id/pickerMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp" android:layout_marginTop="13dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp" android:background="#1f000000" android:layout_gravity="bottom"/>
+            </FrameLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pagerBoard" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="3dp" android:background="#1f000000" android:layout_gravity="bottom"/>
-        </FrameLayout>
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pagerBoard" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px" android:background="#2f000000" android:layout_gravity="bottom"/>
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="50dp" android:orientation="horizontal">
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-                <RadioButton android:id="@+id/rbHome"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" android:layout_gravity="center"
-                    android:alpha="0.6" android:adjustViewBounds="false"
-                    android:button="@null" android:checked="true"
-                    android:background="@drawable/selector_btn_home"
-                    android:onClick="onClickHome"/>
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-                <RadioButton android:id="@+id/rbSearch"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" android:layout_gravity="center"
-                    android:alpha="0.6"
-                    android:button="@null"
-                    android:background="@drawable/selector_btn_search"
-                    android:onClick="onClickSearch"/>
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-                <RadioButton android:id="@+id/rbAdd"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" android:layout_gravity="center"
-                    android:alpha="0.6"
-                    android:button="@null"
-                    android:background="@drawable/selector_btn_add"
-                    android:onClick="onClickAdd"/>
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-                <RadioButton android:id="@+id/rbNoti"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" android:layout_gravity="center"
-                    android:alpha="0.6"
-                    android:button="@null"
-                    android:background="@drawable/selector_btn_noti"
-                    android:onClick="onClickNotification"/>
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-                <RadioButton android:id="@+id/rbPerson"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" android:layout_gravity="center"
-                    android:alpha="0.6"
-                    android:button="@null"
-                    android:background="@drawable/selector_btn_personal"
-                    android:onClick="onClickPerson"/>
-            </FrameLayout>
+                android:layout_height="1px" android:background="#2f000000" android:layout_gravity="bottom"/>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="50dp" android:orientation="horizontal">
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                    <RadioButton android:id="@+id/rbHome"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" android:layout_gravity="center"
+                        android:alpha="0.6" android:adjustViewBounds="false"
+                        android:button="@null" android:checked="true"
+                        android:background="@drawable/selector_btn_home"
+                        android:onClick="onClickHome"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                    <RadioButton android:id="@+id/rbSearch"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" android:layout_gravity="center"
+                        android:alpha="0.6"
+                        android:button="@null"
+                        android:background="@drawable/selector_btn_search"
+                        android:onClick="onClickSearch"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                    <RadioButton android:id="@+id/rbAdd"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" android:layout_gravity="center"
+                        android:alpha="0.6"
+                        android:button="@null"
+                        android:background="@drawable/selector_btn_add"
+                        android:onClick="onClickAdd"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                    <RadioButton android:id="@+id/rbNoti"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" android:layout_gravity="center"
+                        android:alpha="0.6"
+                        android:button="@null"
+                        android:background="@drawable/selector_btn_noti"
+                        android:onClick="onClickNotification"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                    <RadioButton android:id="@+id/rbPerson"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" android:layout_gravity="center"
+                        android:alpha="0.6"
+                        android:button="@null"
+                        android:background="@drawable/selector_btn_personal"
+                        android:onClick="onClickPerson"/>
+                </FrameLayout>
 
-        </RadioGroup>
+            </RadioGroup>
 
-    </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="150dp"
+            android:orientation="horizontal">
+            <ImageView android:layout_width="32dp" android:layout_height="32dp"
+                android:background="@drawable/selector_btn_glasses"/>
+            <TextView android:id="@+id/tvWatchCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+                android:text="0" android:textSize="15sp" android:textStyle="bold"/>
+        </LinearLayout>
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>
