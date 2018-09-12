@@ -18,6 +18,7 @@ public class BoardItem  implements Serializable {
     @JsonProperty    private Date createtime;
     @JsonProperty   private String cropurl;
     @JsonProperty    private int likes = 0, dislikes=0, visit=0, reply=0;
+    @JsonProperty   private ScrapItem scrap;
 
     @JsonProperty
     public String getUserid() {
@@ -73,4 +74,12 @@ public class BoardItem  implements Serializable {
     }
     @JsonProperty
     public String getCropurl() {    return cropurl; }
+    @JsonProperty
+    public ScrapItem getScrap() {   return scrap;   }
+
+    public boolean hasScrap() {
+        if(scrap != null && scrap.getScrapid() != null)
+            return true;
+        return false;
+    }
 }

@@ -16,7 +16,7 @@ public class NetMessage {
         ObjectNode objNode = mapper.createObjectNode();
         objNode.put("action", IConst.ServerAction);
         objNode.put("scode", IConst.ServiceCode);
-        objNode.put("rcode", rcode + "");
+        objNode.put("rcode", ++rcode + "");
         objNode.put("cmd", cmd.getValue());
         return objNode;
     }

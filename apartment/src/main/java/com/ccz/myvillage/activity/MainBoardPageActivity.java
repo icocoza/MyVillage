@@ -49,9 +49,9 @@ public class MainBoardPageActivity extends CommonActivity implements DiscreteScr
     private FrameLayout layoutTopMenu;
     private ViewPager viewPagerBoard;
     private VillageComponentAdapter.ViewHolder viewHolderPrev;
-    private int lastRequestCategory = 0;
-
     private View[] radioButtons = new View[5];  //5 is bottom menu count
+
+    private int lastRequestCategory = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class MainBoardPageActivity extends CommonActivity implements DiscreteScr
             viewHolder.showSelect();
         pickerMenu.setBackgroundColor(ColorCollection.get(adapterPosition));
         viewPagerBoard.setCurrentItem(adapterPosition, true);
+        lastRequestCategory = adapterPosition;
     }
 
     @Override
@@ -165,6 +166,9 @@ public class MainBoardPageActivity extends CommonActivity implements DiscreteScr
 
     public void onClickSearch(View view) {
         resetRadioButton(view);
+        Intent in = new Intent(this, SearchActivity.class);
+        in.putExtra("categories", categoryList);
+        startActivityForResult(in, IRequestCode.REQUESTCODE_BOARD_SEARCH);
     }
 
     public void onClickAdd(View view) {

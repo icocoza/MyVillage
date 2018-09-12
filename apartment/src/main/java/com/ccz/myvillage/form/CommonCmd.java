@@ -5,13 +5,14 @@ import com.ccz.myvillage.constants.ECmd;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Created by 1100177 on 2018. 7. 11..
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommonCmd {
+public class CommonCmd implements Serializable {
     @JsonProperty
     protected String action;
     @JsonProperty

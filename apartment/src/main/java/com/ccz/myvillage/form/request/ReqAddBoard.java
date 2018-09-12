@@ -12,6 +12,8 @@ import java.util.List;
 public class ReqAddBoard extends CommonCmd {
 
     @JsonProperty
+    private String boardid;
+    @JsonProperty
     private String title, content;
     @JsonProperty
     private boolean hasimage, hasfile;
@@ -37,6 +39,8 @@ public class ReqAddBoard extends CommonCmd {
     @JsonProperty public int getCategory()  {   return category;   }
     @JsonProperty public EItemType getItemtype() {  return itemtype;    }
     @JsonProperty public List<String> getFileids()  {   return fileids; }
+
+    public void setBoardid(String boardid) {    this.boardid = boardid; }
 
     public void setTitle(String title) {
         this.title = title;

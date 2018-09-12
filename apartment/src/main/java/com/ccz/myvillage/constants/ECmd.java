@@ -15,7 +15,7 @@ public enum ECmd {
     like("like"), dislike("dislike"),
     addreply("addreply"), delreply("delreply"), replylist("replylist"),
     addvote("addvote"), selvote("selvote"), voteitemlist("voteitemlist"), voteupdate("voteupdate"), changeselection("changeselection"),
-    voteinfolist("voteinfolist"),
+    voteinfolist("voteinfolist"), boardsearch("boardsearch"),
 
     chcreate("chcreate"), chexit("chexit"), chenter("chenter"), chinvite("chinvite"),
     chmime("chmime"), chcount("chcount"), chlastmsg("chlastmsg"), chinfo("chinfo"),

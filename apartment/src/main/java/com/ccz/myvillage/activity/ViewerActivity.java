@@ -1,15 +1,10 @@
 package com.ccz.myvillage.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -25,7 +20,10 @@ import android.widget.Toast;
 
 import com.ccz.myvillage.ICache;
 import com.ccz.myvillage.IConst;
+import com.ccz.myvillage.IRequestCode;
 import com.ccz.myvillage.R;
+import com.ccz.myvillage.activity.dialog.AlertManager;
+import com.ccz.myvillage.activity.dialog.IDialogResultListener;
 import com.ccz.myvillage.common.ImageUtils;
 import com.ccz.myvillage.common.TimeUtils;
 import com.ccz.myvillage.common.ws.WsMgr;
@@ -37,21 +35,20 @@ import com.ccz.myvillage.dto.BoardItem;
 import com.ccz.myvillage.dto.BoardLike;
 import com.ccz.myvillage.dto.Category;
 import com.ccz.myvillage.dto.ReplyItem;
+import com.ccz.myvillage.dto.ScrapItemDetail;
 import com.ccz.myvillage.dto.VoteItem;
 import com.ccz.myvillage.form.response.ResBoardLike;
 import com.ccz.myvillage.form.response.ResContent;
 import com.ccz.myvillage.form.response.ResReplyList;
-import com.ccz.myvillage.form.response.ResponseCmd;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.java_websocket.client.WebSocketClient;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -59,15 +56,17 @@ import java.util.Set;
 
 public class ViewerActivity extends CommonActivity implements ViewTreeObserver.OnScrollChangedListener {
 
+    private Category category;
     private BoardItem boardItem;
+    private ResContent boardContent;
+
+    private List<ReplyItem> replyItemList = new ArrayList<>();
+    private Set<Long> replyIdSet = new HashSet<>();
 
     private ScrollView scrollView;
     private TextView tvAddReply;
     private EditText edtReply;
-
-    private List<ReplyItem> replyItemList = new ArrayList<>();
-    private Set<Long> replyIdSet = new HashSet<>();
-    private  RadioGroup voteRadioGroup;
+    private RadioGroup voteRadioGroup;
     private LinearLayout placeHolderReply;
 
     @Override
@@ -75,6 +74,7 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
+        category = (Category) getIntent().getSerializableExtra("category");
         boardItem = (BoardItem) getIntent().getSerializableExtra("item");
         scrollView = (ScrollView) findViewById(R.id.scrollView);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
@@ -99,6 +99,7 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         WsMgr.getInst().setOnWsListener(this, this);
         reqBoardContent();
     }
+
     @Override
     public void onBackPressed() {
         finish();
@@ -156,6 +157,7 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         ObjectMapper mapper = new ObjectMapper();
         ResContent res = mapper.readValue(origMessage, ResContent.class);
         if (res.getResult().equals("ok")) {
+            boardContent = res;
             ((TextView) findViewById(R.id.tvTitle)).setText(boardItem.getTitle());
             ((TextView) findViewById(R.id.tvId)).setText(boardItem.getCreateusername());
             ((TextView) findViewById(R.id.tvContent)).setText(res.getContent());
@@ -166,10 +168,31 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
             for(BoardFile item : res.getFiles()) {
                 View view = getLayoutInflater().inflate(R.layout.layout_viewer_image, null);
                 ImageView ivThumbnail = (ImageView) view.findViewById(R.id.ivThumbnail);
-                String urlStr = String.format("http://%s:8080/thumb?fileid=%s&scode=%s", item.getFileserver(), item.getFileid(), IConst.ServiceCode);
-                new DownloadImageTask(ivThumbnail).execute(urlStr);
+                Picasso.get().load(item.getFileUrl()).transform(new Transformation() {
+                    @Override
+                    public Bitmap transform(Bitmap source) {
+                        Bitmap scaledBmp = ImageUtils.scaleUpContent(source, IConst.ScreenPixels.getWidth(), IConst.ScreenPixels.getHeight());
+                        if(source != scaledBmp)
+                            source.recycle();
+                        return scaledBmp;
+                    }
+
+                    @Override
+                    public String key() {
+                        return item.getFileUrl();
+                    }
+                }).into(ivThumbnail);
                 ((TextView) view.findViewById(R.id.tvComment)).setText(item.getComment());
                 placeHolderFiles.addView(view);
+            }
+            for(ScrapItemDetail scrap : res.getScraps()) {
+                View view = getLayoutInflater().inflate(R.layout.view_scrap_itemdetail, null);
+                ImageView ivScrap = (ImageView) view.findViewById(R.id.ivScrap);
+                Picasso.get().load(scrap.getScrapimg()).centerInside().
+                        resize(IConst.ScreenPixels.getWidth(), IConst.ScreenPixels.getHeight()/2).into(ivScrap);
+                ((TextView)view.findViewById(R.id.tvTitle)).setText(scrap.getScraptitle());
+                ((TextView)view.findViewById(R.id.tvSubtitle)).setText(scrap.getSubtitle());
+                ((TextView)view.findViewById(R.id.tvBody)).setText(scrap.getBody());
             }
             BoardLike like = res.getLike();
             if(like != null)
@@ -337,14 +360,25 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
     }
 
     private void reqDelBoard() {
-        ObjectNode node = NetMessage.makeDefaultNode(ECmd.delboard);
-        node.put("boardid", boardItem.getBoardid());
-        WsMgr.getInst().send(node.toString());
+        AlertManager.showYesNo(this, null, getString(R.string.board_delete_item), new IDialogResultListener() {
+
+            @Override
+            public void onDialogResult(boolean yesOrNo, int type) {
+                if(yesOrNo == true) {
+                    ObjectNode node = NetMessage.makeDefaultNode(ECmd.delboard);
+                    node.put("boardid", boardItem.getBoardid());
+                    WsMgr.getInst().send(node.toString());
+                }
+            }
+        });
     }
 
     private void resDelBoard(JsonNode jsonNode) {
         if("ok".equals(jsonNode.get("result").asText()) == true) {
             String boardid = jsonNode.get("boardid").asText();
+            Intent intent = new Intent();
+            intent.putExtra("item", boardItem);
+            setResult(IRequestCode.RESULTCODE_BOARDID , intent);
             finish();
             return;
         }
@@ -374,6 +408,10 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
     public void onClickShare(View view) {
     }
 
+    public void onClickBack(View view) {
+        super.onBackPressed();
+    }
+
     public void onClickSelectVote(View view) {
         int selectedId = voteRadioGroup.getCheckedRadioButtonId();
         VoteItem voteItem = (VoteItem) findViewById(selectedId).getTag();
@@ -382,34 +420,6 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
         node.put("vitemid", voteItem.getVitemid()); //reserved
         node.put("isselect", true);
         WsMgr.getInst().send(node.toString());
-    }
-
-    public void onClickMore(View view) {
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView ivThumbnail;
-
-        public DownloadImageTask(ImageView ivThumbnail) {
-            this.ivThumbnail = ivThumbnail;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                Bitmap bmp = BitmapFactory.decodeStream(in);
-                return ImageUtils.scaleUpContent(bmp, IConst.ScreenPixels.getWidth(), IConst.ScreenPixels.getHeight());
-                //return bmp;
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            ivThumbnail.setImageBitmap(result);
-        }
     }
 
     private void addPopupInViewer() {
@@ -430,8 +440,17 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
                                 reqDelBoard();
                                 return true;
                             case R.id.report:
+                                Toast.makeText(ViewerActivity.this, "Not Implemented yet", Toast.LENGTH_SHORT).show();
+                                return true;
                             case R.id.modify:
-                                Toast.makeText(ViewerActivity.this, "Not Implemented NOW", Toast.LENGTH_SHORT).show();
+                                if(boardContent!=null) {
+                                    Intent in = new Intent(ViewerActivity.this, WriteBoardActivity.class);
+                                    in.putExtra("category", category);
+                                    in.putExtra("item", boardItem);
+                                    in.putExtra("content", boardContent);
+                                    startActivityForResult(in, IRequestCode.REQUESTCODE_BOARD_WRITE);
+                                    finish();
+                                }
                                 break;
                         }
                         return false;

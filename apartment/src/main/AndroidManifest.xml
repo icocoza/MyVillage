@@ -34,8 +34,12 @@ uses-feature android:name="android.hardware.camera" android:required="true" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChooseAptActivity" android:theme="@style/AppTheme.NoTitle"/>
-        <activity android:name=".activity.ChooseIdActivity" android:theme="@style/AppTheme.NoTitle"/>
+        <activity
+            android:name=".activity.ChooseAptActivity"
+            android:theme="@style/AppTheme.NoTitle" />
+        <activity
+            android:name=".activity.ChooseIdActivity"
+            android:theme="@style/AppTheme.NoTitle" />
         <activity android:name=".activity.MainBoardPageActivity" />
         <activity
             android:name=".activity.WriteBoardActivity"
@@ -65,7 +69,9 @@ uses-feature android:name="android.hardware.camera" android:required="true" />
         </provider>
 
         <activity android:name=".activity.WriteVoteActivity" />
-        <activity android:name=".activity.PreferenceActivity"></activity>
+        <activity android:name=".activity.PreferenceActivity" />
+        <activity android:name=".activity.SearchActivity"
+            android:theme="@style/AppTheme.NoTitle"/>
     </application>
 
 </manifest>

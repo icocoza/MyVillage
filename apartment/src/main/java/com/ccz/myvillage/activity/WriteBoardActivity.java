@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,14 +35,20 @@ import com.ccz.myvillage.constants.ECmd;
 import com.ccz.myvillage.constants.EError;
 import com.ccz.myvillage.constants.EItemType;
 import com.ccz.myvillage.controller.NetMessage;
+import com.ccz.myvillage.dto.BoardFile;
+import com.ccz.myvillage.dto.BoardItem;
 import com.ccz.myvillage.dto.Category;
 import com.ccz.myvillage.dto.ContentItems;
+import com.ccz.myvillage.form.request.ReqAddBoard;
 import com.ccz.myvillage.form.request.ReqAddVote;
+import com.ccz.myvillage.form.response.ResContent;
 import com.ccz.myvillage.form.response.ResUploadFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.java_websocket.client.WebSocketClient;
 
@@ -65,22 +72,49 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
     private ArrayList<Category> categoryList;
     private int selectedCategoryIndex = -1;
 
-    String imageFilePath;
-    LinearLayout placeHolder;
-    WsFileMgr wsFileMgr;
-    ContentItems contentItems = new ContentItems();
+    private Category category;
+    private ResContent boardContent;
+    private BoardItem boardItem;
+
+    private String imageFilePath;
+    private WsFileMgr wsFileMgr;
+    private ContentItems contentItems = new ContentItems();
     private ArrayList<String> voteItems;
+
+    private TextView tvUpload;
+    private LinearLayout placeHolder;
+    private ProgressBar pbProgress;
+    EditText edtTitle, edtContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_board);
-        placeHolder = (LinearLayout)findViewById(R.id.placeHolder);
-
-        categoryList = (ArrayList<Category>)getIntent().getSerializableExtra("categories");
 
         WsMgr.getInst().setOnWsListener(this, this);
-        showCategoryList();
+
+        tvUpload = (TextView)findViewById(R.id.tvUpload);
+        placeHolder = (LinearLayout)findViewById(R.id.placeHolder);
+        pbProgress = (ProgressBar)findViewById(R.id.pbProgress);
+        edtTitle = (EditText)findViewById(R.id.edtTitle);
+        edtContent = (EditText)findViewById(R.id.edtContent);
+
+        placeHolder.requestFocus();
+        category = (Category)getIntent().getSerializableExtra("category");
+        if(category == null) {
+            categoryList = (ArrayList<Category>) getIntent().getSerializableExtra("categories");
+            showCategoryList();
+        }else {
+            boardContent = (ResContent)getIntent().getSerializableExtra("content");
+            boardItem = (BoardItem)getIntent().getSerializableExtra("item");
+            selectedCategoryIndex = category.getCategory();
+            voteItems = boardContent.getVoteTitleList();
+            showContentForModify();
+            tvUpload.setText(getString(R.string.modify2));
+        }
+
+        //edtContent.setText("테스트 URL 테스트 입니다. https://news.v.daum.net/v/20180903150103126?rcmd=rn 두번째 링크는 https://news.naver.com/main/read.nhn?mode=LSD&mid=shm&sid1=101&oid=018&aid=0004189465 공갈 링크는 http://www.aaa234234.127 입니다. 어떻게 될까요?");
+        //edtContent.setText("테스트 URL https://news.v.daum.net/v/20180903220008425?rcmd=rn 테스트 입니다. 두번째 링크는 https://techcrunch.com/2018/09/02/how-to-help-californians-whose-tap-water-is-tainted/ 공갈 링크는 http://www.aaa234234.127 입니다. 어떻게 될까요?");
     }
 
     @Override
@@ -149,12 +183,20 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
      * */
 
     public void onClickUpload(View view) {
+        pbProgress.setVisibility(View.VISIBLE);
         if(fileInitWsSocketManager() == true)   //has uploading file
             return;
         try {
-            sendAddBoard();
+            tvUpload.setEnabled(false);
+            if(category == null)
+                sendAddBoard();
+            else
+                sendUpdateBoard();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            Toast.makeText(this, getString(R.string.board_add_fail), Toast.LENGTH_SHORT).show();
+            tvUpload.setEnabled(true);
+            pbProgress.setVisibility(View.GONE);
         }
     }
 
@@ -221,15 +263,31 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
                 if("ok".equals(jsonNode.get("result").asText())) {
                     String fileid = jsonNode.get("fileid").asText();
                     wsFileMgr.sendFileStart(contentItems.getCurrentId(), fileid);
+                }else{
+                    tvUpload.setVisibility(View.VISIBLE);
+                    pbProgress.setVisibility(View.GONE);
+                    Toast.makeText(this, getString(R.string.board_fileadd_fail), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case addboard:
             case addvote:
+                pbProgress.setVisibility(View.GONE);
                 if("ok".equals(jsonNode.get("result").asText())) {
                     Toast.makeText(this, getString(R.string.board_add_ok), Toast.LENGTH_LONG).show();
                     setResult(1);
                 }else {
                     Toast.makeText(this, getString(R.string.board_add_fail), Toast.LENGTH_LONG).show();
+                    setResult(0);
+                }
+                finish();
+                break;
+            case updateboard:
+                pbProgress.setVisibility(View.GONE);
+                if("ok".equals(jsonNode.get("result").asText())) {
+                    Toast.makeText(this, getString(R.string.board_update_ok), Toast.LENGTH_LONG).show();
+                    setResult(1);
+                }else {
+                    Toast.makeText(this, getString(R.string.board_update_fail), Toast.LENGTH_LONG).show();
                     setResult(0);
                 }
                 finish();
@@ -312,6 +370,20 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
         });
     }
 
+    private void showContentForModify() {
+        TextView tvCategory = (TextView)findViewById(R.id.tvCategory);
+        tvCategory.setText(category.getTitle());
+        tvCategory.setEnabled(false);
+
+        ((EditText)findViewById(R.id.edtTitle)).setText(boardItem.getTitle());
+        ((EditText)findViewById(R.id.edtContent)).setText(boardContent.getContent());
+        findViewById(R.id.ivVote).setEnabled(false);
+
+        for(BoardFile boardFile : boardContent.getFiles()) {
+            addContent(boardFile);
+        }
+    }
+
     private void loadContents(Uri uri) {
         try {
             Bitmap bm = ImageUtils.resizeContent(this, uri, IConst.IMG_MAX_WIDTH, IConst.IMG_MAX_HEIGHT);
@@ -358,8 +430,45 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
         placeHolder.addView(view);
     }
 
+    private void addContent(BoardFile boardFile) {
+        contentItems.add(boardFile);
+        View view = getLayoutInflater().inflate(R.layout.layout_image_content, null);
+        ImageView ivPhoto = (ImageView)view.findViewById(R.id.ivPhoto);
+        Picasso.get().load(boardFile.getFileUrl()).transform(new Transformation() {
+            @Override
+            public Bitmap transform(Bitmap source) {
+                Bitmap scaledBmp = ImageUtils.scaleUpContent(source, IConst.ScreenPixels.getWidth(), IConst.ScreenPixels.getHeight());
+                if(source != scaledBmp)
+                    source.recycle();
+                return scaledBmp;
+            }
+
+            @Override
+            public String key() {
+                return boardFile.getFileUrl();
+            }
+        }).into(ivPhoto);
+
+        ImageView ivDelete = (ImageView)view.findViewById(R.id.ivDelete);
+        ivDelete.setTag(boardFile.getFileid());
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                placeHolder.removeView((LinearLayout)view.getParent().getParent());
+                contentItems.del((String) view.getTag());
+            }
+        });
+        EditText edtComment = (EditText)view.findViewById(R.id.edtComment);
+        contentItems.setEditText(boardFile.getFileid(), edtComment);
+        placeHolder.addView(view);
+    }
+
     private void sendStartFile() {
-        ContentItems.ContentItem item = contentItems.next();
+        ContentItems.ContentItem item;
+        while( (item = contentItems.next()) != null) {
+            if(item.isUrl() == false)
+                break;
+        }
         if(item != null) {
             ObjectNode node = NetMessage.makeDefaultNode(ECmd.fileinit);
             node.put("filename", item.getFileName());
@@ -369,7 +478,10 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
             WsMgr.getInst().send(node.toString());
         }else {
             try {
-                sendAddBoard();
+                if(category == null)
+                    sendAddBoard();
+                else
+                    sendUpdateBoard();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -377,27 +489,40 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
     }
 
     private void sendAddBoard() throws JsonProcessingException {
-        EditText edtTitle = (EditText)findViewById(R.id.edtTitle);
-        EditText edtContent = (EditText)findViewById(R.id.edtContent);
-
-        ReqAddVote addBoard = new ReqAddVote();
-        addBoard.setCmd( (voteItems == null || voteItems.size() < 1) ? ECmd.addboard : ECmd.addvote);
-        addBoard.setTitle(edtTitle.getText().toString());
-        addBoard.setContent(edtContent.getText().toString());
-        addBoard.setHasimage(contentItems.size()>0);
-        addBoard.setHasfile(false);
-        addBoard.setCategory(selectedCategoryIndex);
-        if(voteItems!=null && voteItems.size() > 0) {
-            addBoard.setItemtype(EItemType.vote);
+        ECmd cmd = (voteItems == null || voteItems.size() < 1) ? ECmd.addboard : ECmd.addvote;
+        ReqAddVote addBoard = makeBoardData(cmd, edtTitle.getText().toString(), edtContent.getText().toString());
+        if(voteItems!=null && voteItems.size() > 0)
             addBoard.setItemList(voteItems);
-        }else {
-            addBoard.setItemtype(contentItems.size() > 0 ? EItemType.textimage : EItemType.text);
-            addBoard.setFileids(contentItems.getFileIds());
-        }
-
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(addBoard);
         WsMgr.getInst().send(json);
+    }
+
+    private void sendUpdateBoard() throws JsonProcessingException {
+        ReqAddVote addBoard = makeBoardData(ECmd.updateboard, edtTitle.getText().toString(), edtContent.getText().toString());
+        addBoard.setBoardid(boardItem.getBoardid());
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(addBoard);
+        WsMgr.getInst().send(json);
+    }
+
+    private ReqAddVote makeBoardData(ECmd cmd, String title, String content) {
+        ReqAddVote addBoard = new ReqAddVote();
+        addBoard.setCmd(cmd);
+        addBoard.setTitle(title);
+        addBoard.setContent(content);
+        addBoard.setHasimage(contentItems.size()>0);
+        addBoard.setHasfile(false);
+        addBoard.setCategory(selectedCategoryIndex);
+        addBoard.setItemtype(getItemType());
+        addBoard.setFileids(contentItems.getFileIds());
+        return addBoard;
+    }
+
+    private EItemType getItemType(){
+        if(voteItems!=null && voteItems.size() > 0)
+            return EItemType.vote;
+        return contentItems.size() > 0 ? EItemType.textimage : EItemType.text;
     }
 
     private void resFlieStart(JsonNode node) {

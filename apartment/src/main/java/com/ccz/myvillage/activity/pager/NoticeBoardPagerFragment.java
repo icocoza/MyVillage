@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Set;
 
 public class NoticeBoardPagerFragment extends DefaultPagerFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
-    private final int REQUEST_CODE_FOR_BOARDWRITE = 1001;
 
     ListView lvBoardList;
 
@@ -46,7 +45,6 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
     private Set<String> boardIdSet = new HashSet<>();
     private BoardItemListAdapter boardItemListAdapter;
 
-    private boolean duplicatedBoardList = false;
     private boolean scrollDown = false;
     private boolean scrollingLock = false;
 
@@ -58,10 +56,6 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         category = (Category) getArguments().getSerializable("category");
-
-        //WsMgr.getInst().setOnWsListener(this.getActivity(), this);
-
-        //reqBoardItemList(category.getCategory(), 0, IConst.MAX_BOARDITEM_COUNT);
     }
 
     @Override
@@ -80,6 +74,12 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
             requestBoardListUp();
         }else if(IRequestCode.REQUESTCODE_PREFERENCE == requestCode && resultCode == 1) {
             lvBoardList.setAdapter(boardItemListAdapter = new BoardItemListAdapter(getContext(), 0, 0, boardItemList));
+        }else if(IRequestCode.REQUESTCODE_BOARD_VIEWER == requestCode && resultCode == IRequestCode.RESULTCODE_BOARDID) {
+            BoardItem boardItem = (BoardItem) data.getSerializableExtra("item");
+            if(boardItem != null) {
+                boardItemList.remove(boardItem);
+                boardItemListAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -131,21 +131,12 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
     }
 
     private void addItemToBottomOfList(ResBoardList res) {
-        duplicatedBoardList = false;    //앞쪽 리스트를 갱신할 경우, 중복된 것이 존재할 경우 새로 갱신하지 않음.
         List<BoardItem> itemList = res.getData();
-        itemList.stream().filter(x -> {
-            boolean contained = false;
-            if ((contained = boardIdSet.contains(x.getBoardid()) == true))
-                duplicatedBoardList = true;
-            return contained == false;
-        }).forEach(y -> {
+        itemList.stream().filter(x -> boardIdSet.contains(x.getBoardid()) ).forEach(y -> {
             boardItemList.add(y);
             boardIdSet.add(y.getBoardid());
         });
         boardItemListAdapter.notifyDataSetChanged();
-        //if(scrollDown == true && itemList.size() < IConst.MAX_BOARDITEM_COUNT)
-        //    endOfList = true;
-
     }
 
     private void addItemToTopOfList(ResBoardList res) {
@@ -167,7 +158,8 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
         BoardItem boardItem = (BoardItem) view.getTag();
         Intent in = new Intent(this.getActivity(), ViewerActivity.class);
         in.putExtra("item", boardItem);
-        startActivityForResult(in, REQUEST_CODE_FOR_BOARDWRITE);
+        in.putExtra("category", category);
+        startActivityForResult(in, IRequestCode.REQUESTCODE_BOARD_VIEWER);
     }
 
     @Override

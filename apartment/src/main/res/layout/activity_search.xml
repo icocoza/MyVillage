@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SearchActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="70dp" android:orientation="horizontal" android:gravity="center_vertical">
+            <EditText android:id="@+id/edtSearch"
+                android:layout_width="0dp" android:layout_height="35dp" android:layout_weight="1"
+                android:inputType="text" android:imeOptions="actionSearch" android:maxLength="32" android:maxLines="1"
+                android:layout_marginLeft="14dp" android:layout_marginRight="5dp" android:background="#DCDCDC" android:hint="@string/input_searchword" android:textSize="17sp"/>
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="match_parent"
+                android:text="@string/cancel" android:textSize="16sp" android:textColor="#000000" android:gravity="center"
+                android:paddingLeft="10dp" android:paddingRight="20dp"
+                android:onClick="onClickCancel"/>
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1px" android:background="#7f808080"/>
+        <LinearLayout android:id="@+id/layoutHistory"
+            android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+            <ListView android:id="@+id/lvHistory"
+                android:layout_width="match_parent" android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/layoutSearchResult"
+            android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="40dp">
+                <TextView android:id="@+id/tvCount"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:text="" android:textSize="14sp" android:textColor="#000000"/>
+                <TextView android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content" android:layout_height="match_parent" android:gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:text="" android:textSize="14dp" android:textColor="#000000"
+                    android:onClick="onClickCategory"/>
+            </LinearLayout>
+            <ListView android:id="@+id/lvSearchResult"
+                android:layout_width="match_parent" android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

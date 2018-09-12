@@ -14,6 +14,7 @@
     <string name="person">명</string>
     <string name="attendee">참여인원</string>
     <string name="modify">수정</string>
+    <string name="modify2">변경</string>
     <string name="delete">삭제</string>
     <string name="select">투표하기</string>
     <string name="report">신고하기</string>
@@ -47,7 +48,11 @@
     <string name="fail_load_content">이미지 컨텐츠 로딩에 실패하였습니다.</string>
 
     <string name="board_add_ok">마이빌리지에 글이 등록되었습니다.</string>
-    <string name="board_add_fail">마이빌리지에 글이 등록이 실패하였습니다.</string>
+    <string name="board_add_fail">마이빌리지에 글 등록이 실패하였습니다.</string>
+    <string name="board_update_ok">수정하신 내용이 업데이트 되었습니다.</string>
+    <string name="board_update_fail">수정내용 업데이트에 실패하였습니다.</string>
+    <string name="board_fileadd_fail">요청하신 파일 업로딩이 실패하였습니다.</string>
+    <string name="board_delete_item">작성하신 글을 삭제 하시겠습니까?</string>
     <string name="end_of_list">리스트의 끝입니다.</string>
 
     <string name="fail_add_reply">댓글 등록에 실패하였습니다.\n다시 시도 바랍니다.</string>
@@ -58,4 +63,9 @@
     <string name="vote_min_2">투표 항목은 최소 2개이상 이어야 합니다.</string>
     <string name="vote_added">투표목록이 첨부 되었습니다.</string>
     <string name="vote_not_modify">투표항목 내용은 등록 후 수정할 수 없습니다.</string>
+
+    <string name="input_searchword">검색어를 입력하세요.</string>
+    <string name="failed_init_db">내장 DB 초기화에 실패하였습니다.\n원활한 서비스가 지원되지 않을 수 있습니다.</string>
+    <string name="search_select_area">검색을 진행 할 지역을 선택해 주세요.</string>
+    <string name="search_2_more">검색어는 2자 이상이어야 합니다.</string>
 </resources>

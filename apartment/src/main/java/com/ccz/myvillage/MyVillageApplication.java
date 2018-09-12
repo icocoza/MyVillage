@@ -3,7 +3,9 @@ package com.ccz.myvillage;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.ccz.myvillage.common.db.DbHelper;
 import com.ccz.myvillage.common.ws.WsMgr;
 
 public class MyVillageApplication extends Application {
@@ -11,7 +13,12 @@ public class MyVillageApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        super.registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks());
+        try {
+            DbHelper.getInst().init(this.getApplicationContext());
+            super.registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks());
+        }catch(Exception e) {
+            Toast.makeText(this.getApplicationContext(), getString(R.string.failed_init_db), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class MyActivityLifecycleCallbacks implements ActivityLifecycleCallbacks {

@@ -15,15 +15,14 @@
             android:padding="5dp"/>
     </FrameLayout>
     <EditText android:id="@+id/edtComment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:padding="5dp"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="5dp" android:layout_marginTop="5dp"
         android:lines="@null"
         android:hint="@string/input_image_comment" android:background="#00000000"
         android:scrollbars="vertical" android:scrollbarStyle="insideInset" android:maxLength="64"
         android:textSize="14sp"/>
 
-    <View
-        android:layout_width="match_parent" android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="#7f808080"/>
+    <View android:layout_width="match_parent" android:layout_height="1px"
+        android:layout_marginTop="10dp" android:background="#4f808080"/>
+    <View android:layout_width="match_parent" android:layout_height="15dp"/>
 </LinearLayout>

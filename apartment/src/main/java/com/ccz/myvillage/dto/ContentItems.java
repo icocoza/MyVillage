@@ -48,10 +48,19 @@ public class ContentItems {
         return true;
     }
 
+    public boolean add(BoardFile boardFile) {
+        ContentItem item = new ContentItem(boardFile);
+        totalSize += item.getSize();
+        map.put(boardFile.getFileid(), item);
+        list.add(item);
+        return true;
+    }
+
     public void del(String key) {
         if(map.containsKey(key)==false)
             return;
-        map.remove(key);
+        ContentItem item = map.remove(key);
+        list.remove(item);
     }
 
     public byte[] getFileData(String key) {
@@ -74,6 +83,11 @@ public class ContentItems {
         if(map.containsKey(key)==false)
             return false;
         return map.get(key).isCamera();
+    }
+    public boolean isUrl(String key) {
+        if(map.containsKey(key)==false)
+            return false;
+        return map.get(key).isUrl();
     }
 
     public void clear() {
@@ -116,10 +130,11 @@ public class ContentItems {
     }
 
     public class ContentItem {
-        final byte[] fileData;
-        final boolean validContent;
-        final boolean isCamera;
-        final String fileName;
+        private byte[] fileData;
+        private long fileSize;
+        private boolean validContent;
+        private boolean isCamera = false;
+        private String fileName, url, comment;
         private EditText edtComment;
 
         private String fileId;
@@ -129,11 +144,22 @@ public class ContentItems {
             validContent = bmp.compress(Bitmap.CompressFormat.JPEG, 90, stream);
             fileData = stream.toByteArray();
             stream.close();
+            this.fileSize = fileData.length;
             this.isCamera = isCamera;
             this.fileName = fileName;
         }
+
+        private ContentItem(BoardFile boardFile) {
+            this.url = boardFile.getFileUrl();
+            this.fileSize = boardFile.getFilesize();
+            this.fileId = boardFile.getFileid();
+            this.comment = boardFile.getComment();
+        }
+
         public void setTextView(EditText edtComment) {
             this.edtComment = edtComment;
+            if(comment != null)
+                this.edtComment.setText(comment);
         }
 
         public String getFileName() {
@@ -153,6 +179,7 @@ public class ContentItems {
         public boolean isCamera() {
             return isCamera;
         }
+        public boolean isUrl() {    return url != null; }
 
         public String getComment() {
             if(edtComment== null)

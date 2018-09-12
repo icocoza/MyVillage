@@ -26,8 +26,7 @@
             <View android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_weight="1"/>
             <FrameLayout android:id="@+id/layoutMore"
-                android:layout_width="45dp" android:layout_height="45dp"
-                android:onClick="onClickMore">
+                android:layout_width="45dp" android:layout_height="45dp">
                 <ImageView android:id="@+id/ivMore"
                     android:layout_width="24dp" android:layout_height="24dp"
                     android:layout_gravity="center"
@@ -76,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:text="7시간" android:textSize="14sp"/>
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp"
+                <View android:layout_width="match_parent" android:layout_height="1px"
                     android:layout_margin="5dp" android:background="#7f808080"/>
                 <TextView android:id="@+id/tvContent"
                     android:layout_width="match_parent"
@@ -84,8 +83,8 @@
                     android:textSize="15sp"
                     android:text="내용"/>
                 <LinearLayout android:id="@+id/placeHolderFiles"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:orientation="vertical">
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+                    android:layout_marginLeft="15dp" android:layout_marginRight="15dp">
                 </LinearLayout>
 
                 <LinearLayout
@@ -148,9 +147,8 @@
             </LinearLayout>
         </ScrollView>
         <!--View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal" android:layout_margin="10dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_margin="10dp">
             <EditText android:id="@+id/edtReply"
                 android:layout_width="match_parent" android:layout_weight="1"
                 android:layout_height="40dp" android:textSize="14dp" android:padding="10dp"

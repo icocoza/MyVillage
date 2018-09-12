@@ -23,6 +23,7 @@ import com.ccz.myvillage.common.Preferences;
 import com.ccz.myvillage.common.TimeUtils;
 import com.ccz.myvillage.dto.BoardArticleTitle;
 import com.ccz.myvillage.dto.BoardItem;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.List;
@@ -65,40 +66,28 @@ public class BoardItemListAdapter extends ArrayAdapter<BoardItem> {
                 ImageView ivCrop = (ImageView)convertView.findViewById(R.id.ivCrop);
 
                 if(item.getCropurl()!=null) {
+                    Picasso.get().load(item.getCropurl()).into(ivCrop);
                     ivCrop.setVisibility(View.VISIBLE);
-                    new DownloadImageTask(ivCrop).execute(item.getCropurl());
+                    //new DownloadImageTask(ivCrop).execute(item.getCropurl());
                 }else
                     ivCrop.setVisibility(View.GONE);
             }
-
+            if(item.hasScrap()) {
+                View layoutScrap = convertView.findViewById(R.id.layoutScrap);
+                layoutScrap.setVisibility(View.VISIBLE);
+                ((TextView)layoutScrap.findViewById(R.id.tvTitle)).setText(item.getScrap().getScraptitle());
+                ((TextView)layoutScrap.findViewById(R.id.tvSubtitle)).setText(item.getScrap().getSubtitle());
+                if(item.getScrap().getScrapimg()!=null) {
+                    ImageView ivScrap = layoutScrap.findViewById(R.id.ivScrap);
+                    String scrapUrl = item.getScrap().getScrapimg();
+                    Picasso.get().load(scrapUrl).into(ivScrap);
+                }
+            }
             convertView.setTag(item);
         }
 
         return convertView;
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView ivThumbnail;
 
-        public DownloadImageTask(ImageView ivThumbnail) {
-            this.ivThumbnail = ivThumbnail;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                Bitmap bmp = BitmapFactory.decodeStream(in);
-                return ImageUtils.scaleUpContent(bmp, IConst.ScreenPixels.getWidth(), IConst.ScreenPixels.getHeight());
-                //return bmp;
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            ivThumbnail.setImageBitmap(result);
-        }
-    }
 }
