@@ -49,14 +49,19 @@ public class DbHelper {
     }
 
     public void insertSearchWord(String word, String user) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(" INSERT INTO ").append(DATABASE_NAME).append("(search, user) VALUES (?, ?)");
-        mDB.execSQL(sb.toString(), new Object[]{ word, user});;
+        try {
+            StringBuffer sb = new StringBuffer();
+            sb.append(" INSERT INTO ").append(Databases.BoardDB.TABLENAME).append("(search, user) VALUES (?, ?)");
+            mDB.execSQL(sb.toString(), new Object[]{word, user});
+            ;
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List getSearchWord() {
         StringBuffer sb = new StringBuffer();
-        sb.append(" SELECT search, user, createdAt FROM ").append(DATABASE_NAME).append(" LIMIT 0, 50"); // 읽기 전용 DB 객체를 만든다.
+        sb.append(" SELECT search, user, createdAt FROM ").append(Databases.BoardDB.TABLENAME).append(" LIMIT 0, 50"); // 읽기 전용 DB 객체를 만든다.
 
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sb.toString(), null);
@@ -83,7 +88,7 @@ public class DbHelper {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(Databases.BoardDB.CREATE_QUERY);
-
+            db.execSQL(Databases.BoardDB.CREATE_INDEX_QUERY);
         }
 
         // 버전이 업데이트 되었을 경우 DB를 다시 만들어 준다.

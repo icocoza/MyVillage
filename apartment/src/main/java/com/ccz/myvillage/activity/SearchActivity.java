@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.ccz.myvillage.IConst;
 import com.ccz.myvillage.IRequestCode;
+import com.ccz.myvillage.MyVillageApplication;
 import com.ccz.myvillage.R;
 import com.ccz.myvillage.activity.dialog.AlertManager;
 import com.ccz.myvillage.activity.dialog.IDialogListResultListener;
@@ -107,7 +108,12 @@ public class SearchActivity extends CommonActivity implements AbsListView.OnScro
     }
 
     private void initSeachHistoryFromDB() {
-
+        try {
+            DbHelper.getInst().init(this);
+        }catch(Exception e) {
+            Log.e("[ERROR]", e.getMessage());
+            Toast.makeText(this.getApplicationContext(), getString(R.string.failed_init_db), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void doSearch(final String searchWord) {
@@ -166,10 +172,12 @@ public class SearchActivity extends CommonActivity implements AbsListView.OnScro
 
     private void addItemToBottomOfList(ResBoardList res) {
         List<BoardItem> itemList = res.getData();
-        itemList.stream().filter(x -> boardIdSet.contains(x.getBoardid()) ).forEach(y -> {
-            boardItemList.add(y);
-            boardIdSet.add(y.getBoardid());
-        });
+        for(BoardItem item : itemList) {
+            if(boardIdSet.contains(item.getBoardid()) == false) {
+                boardIdSet.add(item.getBoardid());
+                boardItemList.add(item);
+            }
+        }
         boardItemListAdapter.notifyDataSetChanged();
     }
 

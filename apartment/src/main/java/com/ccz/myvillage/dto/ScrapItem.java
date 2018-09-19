@@ -10,9 +10,13 @@ public class ScrapItem  implements Serializable {
     @JsonProperty private String scrapid;
     @JsonProperty private String scraptitle, subtitle;
     @JsonProperty private String scrapimg;
+    @JsonProperty private String scrapext;
 
     @JsonProperty public String getScrapid() {  return scrapid; }
     @JsonProperty public String getScraptitle() {    return scraptitle;   }
     @JsonProperty public String getSubtitle() { return subtitle;    }
     @JsonProperty public String getScrapimg() { return scrapimg;    }
+    @JsonProperty public String getScrapext() { return scrapext;    }
+
+    public String getScrapFilename() {  return scrapimg +"."+ scrapext; }
 }

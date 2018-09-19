@@ -132,23 +132,30 @@ public class NoticeBoardPagerFragment extends DefaultPagerFragment implements Ab
 
     private void addItemToBottomOfList(ResBoardList res) {
         List<BoardItem> itemList = res.getData();
-        itemList.stream().filter(x -> boardIdSet.contains(x.getBoardid()) ).forEach(y -> {
-            boardItemList.add(y);
-            boardIdSet.add(y.getBoardid());
-        });
+        for(BoardItem item : itemList) {
+            if(boardIdSet.contains(item.getBoardid()) == false) {
+                boardIdSet.add(item.getBoardid());
+                boardItemList.add(item);
+            }
+        }
         boardItemListAdapter.notifyDataSetChanged();
     }
 
     private void addItemToTopOfList(ResBoardList res) {
+        boolean bAdded = false;
         List<BoardItem> itemList = res.getData();
         for(int i=itemList.size()-1; i>=0; i--) {
             BoardItem item = itemList.get(i);
             if(boardIdSet.contains(item.getBoardid()) == false) {
                 boardItemList.add(0, item);
                 boardIdSet.add(item.getBoardid());
+                bAdded = true;
             }
         }
-        boardItemListAdapter.notifyDataSetChanged();
+        if(bAdded == true) {
+            lvBoardList.setAdapter(boardItemListAdapter = new BoardItemListAdapter(getContext(), 0, 0, boardItemList));
+            boardItemListAdapter.notifyDataSetChanged();
+        }
     }
 
     //////////////////////////////////

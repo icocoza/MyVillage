@@ -13,12 +13,7 @@ public class MyVillageApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        try {
-            DbHelper.getInst().init(this.getApplicationContext());
-            super.registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks());
-        }catch(Exception e) {
-            Toast.makeText(this.getApplicationContext(), getString(R.string.failed_init_db), Toast.LENGTH_SHORT).show();
-        }
+        super.registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks());
     }
 
     public class MyActivityLifecycleCallbacks implements ActivityLifecycleCallbacks {

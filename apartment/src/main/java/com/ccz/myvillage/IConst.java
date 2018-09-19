@@ -4,13 +4,13 @@ import android.util.Size;
 
 public class IConst {
     //remote
-    //public static String host = "ws://45.76.220.83:8081/wss"; //vultr
-    //public static String apptoken = "965PFFqrhmdGZs86NyHjhujntqOeOtcipHsKoGCw9z1CFTfIFlyEA6xcDxEyfgCbhPGw65MT73BSynSZM2Yk85gieie";
+    public static String host = "ws://45.76.220.83:8081/wss"; //vultr
+    public static String apptoken = "965PFFqrhmdGZs86NyHjhujntqOeOtcipHsKoGCw9z1CFTfIFlyEA6xcDxEyfgCbhPGw65MT73BSynSZM2Yk85gieie";
 
     //local
     //public static String host = "ws://192.168.43.224:8081/wss";//home
-    public static String host = "ws://172.23.251.3:8081/wss";  //
-    public static String apptoken = "XM2ezCyVelxmm99qg99ZzrZRVJ4A6fLJ9vgLKKVxripXYFMn6hVw7d8Ax1g6LaV3mCBr3kG0zCxJcgwwWvRxbLAieie";
+    //public static String host = "ws://172.23.251.13:8081/wss";  //
+    //public static String apptoken = "XM2ezCyVelxmm99qg99ZzrZRVJ4A6fLJ9vgLKKVxripXYFMn6hVw7d8Ax1g6LaV3mCBr3kG0zCxJcgwwWvRxbLAieie";
 
     public static String PreferenceID = "MyVillagePref";
 

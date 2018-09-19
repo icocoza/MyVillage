@@ -28,17 +28,20 @@ public class VillageBoardPagerAdapter extends FragmentPagerAdapter {
         position = position % noticeBoardPagers.length;
         if(noticeBoardPagers[position] != null)
             return noticeBoardPagers[position];
+        return initBoardPager(position);
+    }
 
+    @Override
+    public int getCount() {
+        return categoryList.size();
+    }
+
+    private NoticeBoardPagerFragment initBoardPager(int position) {
         Bundle args = new Bundle();
         args.putSerializable("category", categoryList.get(position));
 
         noticeBoardPagers[position] = new NoticeBoardPagerFragment();
         noticeBoardPagers[position].setArguments(args);
         return noticeBoardPagers[position];
-    }
-
-    @Override
-    public int getCount() {
-        return categoryList.size();
     }
 }

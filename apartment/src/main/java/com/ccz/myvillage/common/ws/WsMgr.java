@@ -1,6 +1,7 @@
 package com.ccz.myvillage.common.ws;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.util.Log;
 
 import org.java_websocket.client.WebSocketClient;
@@ -61,7 +62,13 @@ public class WsMgr {
         }catch(Exception e) {
             e.printStackTrace();
         }
-        connectServer();
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                connectServer();
+            }
+        }, 2000);
+
         return true;
     }
 

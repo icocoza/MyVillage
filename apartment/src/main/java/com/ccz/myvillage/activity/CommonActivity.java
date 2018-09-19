@@ -113,4 +113,5 @@ public abstract class CommonActivity  extends AppCompatActivity implements IWsLi
         WsMgr.getInst().send(node.toString());
     }
 
+
 }

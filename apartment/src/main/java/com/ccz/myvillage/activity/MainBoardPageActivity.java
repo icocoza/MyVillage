@@ -1,6 +1,7 @@
 package com.ccz.myvillage.activity;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -69,6 +70,7 @@ public class MainBoardPageActivity extends CommonActivity implements DiscreteScr
         WsMgr.getInst().setOnWsListener(this, this);
         reqCagetoryList();
         initRadioButton();
+
     }
 
     @Override
@@ -145,8 +147,13 @@ public class MainBoardPageActivity extends CommonActivity implements DiscreteScr
             viewPagerBoard = (ViewPager)findViewById(R.id.pagerBoard);
             viewPagerBoard.setAdapter(new VillageBoardPagerAdapter(getSupportFragmentManager(), categoryList));
             viewPagerBoard.addOnPageChangeListener(this);
-            NoticeBoardPagerFragment noticeBoardPagerFragment = (NoticeBoardPagerFragment) viewPagerBoard.getAdapter().instantiateItem(viewPagerBoard, 0);
-            noticeBoardPagerFragment.requestBoardList();
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    NoticeBoardPagerFragment page = (NoticeBoardPagerFragment)getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pagerBoard + ":" + viewPagerBoard.getCurrentItem());
+                    page.requestBoardList();
+                }
+            }, 500);
+
         }
     }
 
@@ -191,7 +198,6 @@ public class MainBoardPageActivity extends CommonActivity implements DiscreteScr
     /////// Start for ViewPager
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override

@@ -66,7 +66,7 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
     private ScrollView scrollView;
     private TextView tvAddReply;
     private EditText edtReply;
-    private RadioGroup voteRadioGroup;
+    //private RadioGroup voteRadioGroup;
     private LinearLayout placeHolderReply;
 
     @Override
@@ -188,11 +188,13 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
             for(ScrapItemDetail scrap : res.getScraps()) {
                 View view = getLayoutInflater().inflate(R.layout.view_scrap_itemdetail, null);
                 ImageView ivScrap = (ImageView) view.findViewById(R.id.ivScrap);
-                Picasso.get().load(scrap.getScrapimg()).centerInside().
-                        resize(IConst.ScreenPixels.getWidth(), IConst.ScreenPixels.getHeight()/2).into(ivScrap);
+                //Picasso.get().load(scrap.getScrapimg()).centerInside().
+                //        resize(IConst.ScreenPixels.getWidth(), IConst.ScreenPixels.getHeight()/2).into(ivScrap);
+                Picasso.get().load(scrap.getScrapimg()).fit().into(ivScrap);
                 ((TextView)view.findViewById(R.id.tvTitle)).setText(scrap.getScraptitle());
                 ((TextView)view.findViewById(R.id.tvSubtitle)).setText(scrap.getSubtitle());
                 ((TextView)view.findViewById(R.id.tvBody)).setText(scrap.getBody());
+                placeHolderFiles.addView(view);
             }
             BoardLike like = res.getLike();
             if(like != null)
@@ -229,14 +231,15 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
 
     private void updateVoteList(List<VoteItem> voteList) {
         View view = getLayoutInflater().inflate(R.layout.layout_board_vote, null);
-        voteRadioGroup = view.findViewById(R.id.radioGroupHolder);
+        RadioGroup voteRadioGroup = view.findViewById(R.id.radioGroupHolder);
         voteRadioGroup.removeAllViews();
         for(VoteItem item : voteList) {
-            View voteView = getLayoutInflater().inflate(R.layout.view_vote_viewer, null);
-            RadioButton radioButton = ((RadioButton)voteView.findViewById(R.id.rbVoteItem));
+            RadioButton radioButton = new RadioButton(this);
+            //View voteView = getLayoutInflater().inflate(R.layout.view_vote_viewer, null);
+            //RadioButton radioButton = ((RadioButton)voteView.findViewById(R.id.rbVoteItem));
             radioButton.setText(item.getVotetext());
             radioButton.setTag(item);
-            voteRadioGroup.addView(voteView);
+            voteRadioGroup.addView(radioButton);
         }
         LinearLayout placeHolderFiles = (LinearLayout) findViewById(R.id.placeHolderFiles);
         placeHolderFiles.addView(view);
@@ -413,6 +416,7 @@ public class ViewerActivity extends CommonActivity implements ViewTreeObserver.O
     }
 
     public void onClickSelectVote(View view) {
+        RadioGroup voteRadioGroup = view.findViewById(R.id.radioGroupHolder);
         int selectedId = voteRadioGroup.getCheckedRadioButtonId();
         VoteItem voteItem = (VoteItem) findViewById(selectedId).getTag();
         ObjectNode node = NetMessage.makeDefaultNode(ECmd.selvote);

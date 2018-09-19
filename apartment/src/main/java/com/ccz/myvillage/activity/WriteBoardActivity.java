@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
@@ -279,7 +280,7 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
                     Toast.makeText(this, getString(R.string.board_add_fail), Toast.LENGTH_LONG).show();
                     setResult(0);
                 }
-                finish();
+                delayedFinish();
                 break;
             case updateboard:
                 pbProgress.setVisibility(View.GONE);
@@ -294,6 +295,14 @@ public class WriteBoardActivity extends CommonActivity implements IWsListener {
                 break;
         }
         return true;
+    }
+
+    private void delayedFinish() {
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                finish();
+            }
+        }, 2000);
     }
 
     private boolean fileInitWsSocketManager() {
